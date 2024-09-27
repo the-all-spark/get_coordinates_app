@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Получить координаты объекта</title>
+        <link rel="stylesheet" href="./style.css">
+
+    </head>
+
+    <body>
+        <div class="container">
+
+            <div class="photo">
+                <img src="./assets/outside_general_1000.jpg" alt="Изображение">
+
+                <svg>
+                    <!-- * Вывод polygon -->
+                </svg>
+
+                <!-- * Вставка кружочков выделения -->
+            </div>
+
+            <div class="info-block">
+                <div class="block">
+                    <p><b>Размер изображения</b> (ширина, высота):</p>
+                    <div class="size-line">
+                        <span class="size-string">1000</span> x <span class="size-string">1000</span> px
+                    </div>
+                </div>
+
+                <div class="block"><b>Как пользоваться?</b>
+                    <ul>
+                        <li>для получения координат x,y объекта кликните курсором мышки на нужную точку изображения
+                            (выделится кругом);</li>
+                        <li>двигайтесь по часовой стрелке, щелкая курсором, где необходимо;</li>
+                        <li>для сохранения координат нажмите на кнопку "Завершить" ниже.</li>
+                    </ul>
+                </div>
+
+                <div class="coordinate-block block">
+                    <p><b>Координаты объекта:</b></p>
+                    <button class="finish-btn">Завершить</button>
+
+                    <div class="points">
+                        <p class="points-example example">Например, <br> Точка 1: x = 323, y = 430 <br> Точка 2: x = 539, y
+                            = 430</p>
+                        <!-- * Сюда будут добавляться координаты по точкам -->
+                    </div>
+
+                    <div>
+                        <p><b>Строка координат (в формате x,y):</b></p>
+                        <p class="coord-str example">Например, 323,430,539,430</p>
+                        <!-- * Сюда будет выводиться строка координат -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+</html>
