@@ -4,10 +4,22 @@ function start() {
     console.log("Координаты арены: 323,430,539,430,538,618,322,618");
 
     let imageBlock = document.querySelector(".photo img"); // изображение
-    let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
+    
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
     let pointsExample = document.querySelector(".points-example"); // пример вывода точек
     let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
+
+    let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
+    let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
+
+    // * Реакция неактивной кнопки "Обновить" на наведение курсора
+    if(resetBtn.getAttribute("disabled") === "") {
+        console.log("Кнопка не активна");
+        resetBtn.onmouseover = function() {
+            resetBtn.style.backgroundColor = "rgba(239, 239, 239, 0.3)"; 
+        };
+        resetBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
+    }
 
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа

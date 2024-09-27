@@ -82,20 +82,26 @@ body {
 }
 
 /* ! сделать плавающей но вне блока с изображением */
+.btn:hover {
+    cursor: pointer;
+    background-color: rgb(211, 228, 255);
+    border-radius: 3px;
+}
+
+.btn:disabled {
+    border-radius: 3px;
+}
+
 .finish-btn {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-.finish-btn:disabled {
-    border-radius: 3px;
-}
-
-.finish-btn:hover {
-    cursor: pointer;
-    background-color: rgb(211, 228, 255);
-    border-radius: 3px;
+.reset-btn {
+    position: absolute;
+    bottom: -30px;
+    right: 0;
 }
 
 .coord {
