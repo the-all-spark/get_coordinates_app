@@ -144,7 +144,9 @@ function start() {
         }
         
         // вывод строки координат
-
+        coordStr.innerHTML = string;
+        coordStr.style.color = "black"; 
+        
         // выделение полигона
 
     }
