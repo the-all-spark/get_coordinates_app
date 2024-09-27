@@ -146,17 +146,28 @@ function start() {
         // вывод строки координат
         coordStr.innerHTML = string;
         coordStr.style.color = "black"; 
-        
-        // выделение полигона
 
+        // выделение полигона
+        highlightPolygon(coordStr.innerHTML);
     }
 
+    // * функция выделения цветом и рамкой полигона по координатам
+    function highlightPolygon(str) {
+            //console.log(str);
 
+        let svgBlock = document.querySelector(".photo svg");
+       
+        let polygonElem = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        polygonElem.setAttribute("points", str);
+            //console.log(polygonElem);
 
+        svgBlock.append(polygonElem);
+            //console.log(svgBlock);
 
+        svgBlock.style.display = "block";  
+    }
 
-
-
-
+    // TODO - скопировать строку с координатами кнопкой
+    // TODO дать возможность корректировать каждую цифру => меняется область выделения
 
 }

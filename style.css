@@ -44,7 +44,12 @@ body {
     height: 1000px;
 }
 
-/* ! polygon */
+.photo polygon {
+    fill: rgb(214 120 127 / 55%);
+    stroke: rgba(196, 19, 19, 0.785);
+	stroke-width: 7;
+    -webkit-tap-highlight-color: transparent; /* чтобы не мерцала рамка при клике */
+}
 
 /* -------------------- Блок с информацией -------------------- */
 
