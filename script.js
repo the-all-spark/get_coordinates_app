@@ -5,6 +5,9 @@ function start() {
 
     let imageBlock = document.querySelector(".photo img"); // изображение
     let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
+    let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
+    let pointsExample = document.querySelector(".points-example"); // пример вывода точек
+    let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
 
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа
@@ -100,15 +103,57 @@ function start() {
                     coordStr += obj[prop].join(",") + ","; 
                 }
             }
-            
+            showCoords(obj,coordStr);  // вызов функции вывода строки
         }
+    }
+
+    // * функция вывода блока информации с координатами
+    function showCoords(object,string) {
+
+        // вывод точек и их координат
+        // <span>Точка 1:</span> <span class="coord">x = 228,</span> <span class="coord">y = 788</span>
+        for (let prop in object) {
+            
+            // заголовок с номером точки
+            let pointNumSpan = document.createElement("span");
+            let pointNum = `Точка ${prop}: `;
+            pointNumSpan.prepend(pointNum);
+                //console.log(pointNumSpan);
+
+            //координата X
+            let xSpan = document.createElement("span");
+            xSpan.className = "coord";
+            let numX = ` x = ${object[prop][0]},`;
+            xSpan.innerHTML = numX;
+                //console.log(xSpan);
+
+            //координата Y
+            let ySpan = document.createElement("span");
+            ySpan.className = "coord";
+            let numY = ` y = ${object[prop][1]}`;
+            ySpan.innerHTML = numY;
+                //console.log(ySpan);
+
+            // соединяем и выводим
+            pointsExample.innerHTML = ""; // удаляем пример
+
+            pointsBlock.append(pointNumSpan);
+            pointsBlock.append(xSpan);
+            pointsBlock.append(ySpan);
+            pointsBlock.insertAdjacentHTML("beforeend","</br>");
+        }
+        
+        // вывод строки координат
+
+        // выделение полигона
+
     }
 
 
 
 
 
-    
+
 
 
 
