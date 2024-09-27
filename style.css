@@ -23,7 +23,17 @@ body {
     position: relative;
 }
 
-/* ! circle-mark */
+.circle-mark {
+    display: none;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(255 52 52 / 51%);
+    border-radius: 50%;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+}
 
 .photo svg {
     display: none;
