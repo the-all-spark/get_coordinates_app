@@ -12,13 +12,34 @@ function start() {
     imageBlock.addEventListener("click", getCoords);
 
     function getCoords(e) {
-        // ! реакция на клик мышки
+        clickReaction(e); // реакция на клик мышки (вызов функции)
 
         let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
 
         number++;
         objCoords = savePoint(number, coords); // сохраняем координаты под порядковым номеров в объекте (вызов функции) 
         //console.log(objCoords);
+    }
+
+    // * функция отмечает каждую точку клика полупрозрачным кругом
+    function clickReaction(e) {
+        let x = e.pageX;
+        let y = e.pageY;
+
+        let circleMark = document.createElement("div");
+        circleMark.className = "circle-mark";
+
+        // высчитываем значения смещения круга с учетом размеров блока (20 x 20 px)
+        // top: calc(430px - 10px); 
+        // left: calc(323px - 10px);
+        let yPos = y - 10;
+        let xPos = x - 10;
+
+        circleMark.style.top = yPos + "px"; // Y
+        circleMark.style.left = xPos + "px"; // X
+        circleMark.style.display = "block";
+
+        document.querySelector(".photo").append(circleMark);
     }
 
     // * функция получения координат
