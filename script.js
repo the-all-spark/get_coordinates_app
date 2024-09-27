@@ -71,12 +71,44 @@ function start() {
         for(let i = 0; i < circlesArr.length; i++) {
             circlesArr[i].remove();
         }
+        makeString(objCoords); // вызов функции
+    }
 
+    // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
+    function makeString(obj) {
+        //console.log(obj);
+        
+        if(finishBtn.style.cursor !== "not-allowed") {
+            // делаем кнопку неактивной, меняем цвет при наведении на кнопку
+            finishBtn.setAttribute("disabled", "");
+            finishBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
+            finishBtn.onmouseover = function() {
+                finishBtn.style.backgroundColor = "rgba(239, 239, 239, 0.3)";
+            };
 
+            let coordStr = ""; // пустая строка для вывода
+            let objLength = Object.keys(obj).length; // количество свойств в объекте
+
+            // перебор свойств объектов
+            for (let prop in obj) {
+                //console.log(obj[prop]);   // значение
+                //console.log(prop);        // ключ
+
+                if (prop == objLength) {
+                    coordStr += obj[prop].join(","); // если пара ключ=значение последняя, запятая не ставится
+                } else {
+                    coordStr += obj[prop].join(",") + ","; 
+                }
+            }
+            
+        }
     }
 
 
 
+
+
+    
 
 
 
