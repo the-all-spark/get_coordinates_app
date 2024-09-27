@@ -4,6 +4,7 @@ function start() {
     console.log("Координаты арены: 323,430,539,430,538,618,322,618");
 
     let imageBlock = document.querySelector(".photo img"); // изображение
+    let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
 
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа
@@ -55,7 +56,24 @@ function start() {
         return objCoords;
     }
 
+    // * ----- При клике на кнопку "Завершить" - выводим координаты (вызов функции) 
+    // TODO запретить клик на кнопку если координат меньше 3х
+    finishBtn.addEventListener("click", prepare);
+    
+    function prepare() {
+        // больше не позволит получать координаты до // TODO  очистки данных (перезагрузки)
+        imageBlock.removeEventListener("click", getCoords); 
 
+        // убираем кружки
+        let circles = document.querySelectorAll(".circle-mark");
+        let circlesArr = Array.from(circles);
+
+        for(let i = 0; i < circlesArr.length; i++) {
+            circlesArr[i].remove();
+        }
+
+
+    }
 
 
 
