@@ -23,6 +23,19 @@ function start() {
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа
 
+    // * ---- Вывести размеры загруженного изображения
+    //console.log(`ширина: ${imageBlock.clientWidth}`);
+    //console.log(`высота: ${imageBlock.clientHeight}`);
+
+    let wElem = document.querySelector(".width-size");
+    let hElem = document.querySelector(".height-size");
+
+    let w = imageBlock.clientWidth;
+    let h = imageBlock.clientHeight;
+
+    wElem.append(w);
+    hElem.append(h);
+
     // * ---- Получить и сохранить координаты при клике на изображение
     imageBlock.addEventListener("click", getCoords);
 
