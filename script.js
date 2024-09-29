@@ -14,11 +14,10 @@ function start() {
 
     // * Реакция неактивной кнопки "Обновить" на наведение курсора
     if(resetBtn.getAttribute("disabled") === "") {
-        console.log("Кнопка не активна");
         resetBtn.onmouseover = function() {
             resetBtn.style.backgroundColor = "rgba(239, 239, 239, 0.3)"; 
         };
-        resetBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
+        //resetBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
     }
 
     let objCoords = {}; // пустой объект с координатами
