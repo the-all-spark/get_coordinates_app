@@ -7,6 +7,7 @@ function start() {
     
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
     let pointsExample = document.querySelector(".points-example"); // пример вывода точек
+    let coordStrExample = document.querySelector(".coord-str-example"); // пример вывода строки координат 
     let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
 
     let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
@@ -81,11 +82,11 @@ function start() {
         return objCoords;
     }
 
-    // * ----- При клике на кнопку "Завершить" - выводим координаты (вызов функции) 
+    // * ----- При клике на кнопку "Завершить" - вывести координаты
     finishBtn.addEventListener("click", prepare);
     
     function prepare() {
-        // больше не позволит получать координаты до // TODO  очистки данных (перезагрузки)
+        // больше не позволит получать координаты до очистки данных (перезагрузки)
         imageBlock.removeEventListener("click", getCoords); 
 
         // разблокировка кнопки "Обновить"
@@ -108,6 +109,7 @@ function start() {
         //console.log(obj);
 
         if(finishBtn.getAttribute("disabled") === null) {
+
             // делаем кнопку неактивной
             finishBtn.setAttribute("disabled", "");
            
@@ -156,8 +158,9 @@ function start() {
             ySpan.innerHTML = numY;
                 //console.log(ySpan);
 
-            // соединяем и выводим
-            pointsExample.innerHTML = ""; // удаляем пример
+            //скрываем примеры, соединяем и выводим
+            pointsExample.style.display = "none";
+            coordStrExample.style.display = "none";
 
             pointsBlock.append(pointNumSpan);
             pointsBlock.append(xSpan);
@@ -189,7 +192,35 @@ function start() {
         svgBlock.style.display = "block";  
     }
 
+    // * ----- Сброс данных при клике на кнопку "Обновить"
+    resetBtn.addEventListener("click", reset);
+
+    function reset() {
+        // очищаем блок с точками, строку; делаем неактивной кнопку обновить
+        pointsBlock.innerHTML = "";
+        coordStr.innerHTML = "";
+        resetBtn.setAttribute("disabled", "");
+
+        // удаляем выделенный полигон, скрываем svg
+        let poly = document.querySelector(".photo svg polygon");
+        poly.remove();
+        document.querySelector(".photo svg").style.display = "none";
+
+        // очищаем объект с координатами точек
+        objCoords = {}; 
+        number = 0;
+        
+        // возвращаем примеры
+        pointsExample.style.display = "block";
+        coordStrExample.style.display = "block";
+
+        imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
+
+    }
+
     // TODO - скопировать строку с координатами кнопкой
     // TODO дать возможность корректировать каждую цифру => меняется область выделения
 
+
+    
 }
