@@ -12,14 +12,6 @@ function start() {
     let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
     let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
 
-    // * Реакция неактивной кнопки "Обновить" на наведение курсора
-    if(resetBtn.getAttribute("disabled") === "") {
-        resetBtn.onmouseover = function() {
-            resetBtn.style.backgroundColor = "rgba(239, 239, 239, 0.3)"; 
-        };
-        //resetBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
-    }
-
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа
 
@@ -40,6 +32,12 @@ function start() {
     imageBlock.addEventListener("click", getCoords);
 
     function getCoords(e) {
+
+        // разблокировка кнопки "Завершить"
+        if(finishBtn.getAttribute("disabled") === "") {
+            finishBtn.removeAttribute("disabled");
+        }
+
         clickReaction(e); // реакция на клик мышки (вызов функции)
 
         let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
@@ -84,12 +82,16 @@ function start() {
     }
 
     // * ----- При клике на кнопку "Завершить" - выводим координаты (вызов функции) 
-    // TODO запретить клик на кнопку если координат меньше 3х
     finishBtn.addEventListener("click", prepare);
     
     function prepare() {
         // больше не позволит получать координаты до // TODO  очистки данных (перезагрузки)
         imageBlock.removeEventListener("click", getCoords); 
+
+        // разблокировка кнопки "Обновить"
+        if(resetBtn.getAttribute("disabled") === "") {
+            resetBtn.removeAttribute("disabled");
+        }
 
         // убираем кружки
         let circles = document.querySelectorAll(".circle-mark");
@@ -104,15 +106,11 @@ function start() {
     // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
     function makeString(obj) {
         //console.log(obj);
-        
-        if(finishBtn.style.cursor !== "not-allowed") {
-            // делаем кнопку неактивной, меняем цвет при наведении на кнопку
-            finishBtn.setAttribute("disabled", "");
-            finishBtn.style.cursor = "not-allowed"; // ! поменять на обычный при обновлении данных
-            finishBtn.onmouseover = function() {
-                finishBtn.style.backgroundColor = "rgba(239, 239, 239, 0.3)";
-            };
 
+        if(finishBtn.getAttribute("disabled") === null) {
+            // делаем кнопку неактивной
+            finishBtn.setAttribute("disabled", "");
+           
             let coordStr = ""; // пустая строка для вывода
             let objLength = Object.keys(obj).length; // количество свойств в объекте
 

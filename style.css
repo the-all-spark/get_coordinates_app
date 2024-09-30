@@ -93,6 +93,10 @@ body {
     cursor: not-allowed;
 }
 
+.btn:disabled:hover {
+    background-color: rgba(239, 239, 239, 0.3);
+}
+
 .finish-btn {
     position: absolute;
     top: 0;
