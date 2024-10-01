@@ -81,6 +81,10 @@ body {
     color: rgb(151, 151, 151);
 }
 
+.coord {
+    color: rgb(210, 37, 25);
+}
+
 /* ! сделать плавающей но вне блока с изображением */
 .btn:hover {
     cursor: pointer;
@@ -109,6 +113,40 @@ body {
     right: 0;
 }
 
-.coord {
-    color: rgb(210, 37, 25);
+/* Кнопка скопировать строку кода */
+
+.copy-btn {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    /*bottom: -5px;
+    right: 0;*/
+    border: transparent;
+    background-color: transparent;
+}
+
+.copy-btn:hover {
+    cursor: pointer;
+}
+
+.copy-btn:disabled {
+    cursor: not-allowed;
+}
+
+.copy-btn:disabled svg:hover path {
+    fill: #C0C0C0;
+}
+
+.copy-btn svg:hover path {
+    fill:rgb(60, 101, 166);
+}
+
+.copied-message {
+    display: none;
+    color: #1fbc8c;
+    position: absolute;
+    left: 30px;
+    bottom: -25px;
+    /*right: 30px;
+    bottom: 0px;*/
 }
