@@ -12,6 +12,7 @@ function start() {
 
     let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
     let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
+    let copyBtn = document.querySelector(".copy-btn"); // кнопка копирования строки
 
     let objCoords = {}; // пустой объект с координатами
     let number = 0; // начальное значение для имени ключа
@@ -172,8 +173,20 @@ function start() {
         coordStr.innerHTML = string;
         coordStr.style.color = "black"; 
 
+        //сделать активной кнопку копирования строки с координатами
+        copyBtn.removeAttribute("disabled");
+        copyBtn.addEventListener("click",copyCoordStr);
+
         // выделение полигона
         highlightPolygon(coordStr.innerHTML);
+    }
+
+    // * функция копирования строки с координатами
+    function copyCoordStr() {
+        document.querySelector(".copy-btn svg path").style.fill = "#1fbc8c";
+        document.querySelector(".copied-message").style.display = "block"; 
+        
+        navigator.clipboard.writeText(coordStr.innerHTML);
     }
 
     // * функция выделения цветом и рамкой полигона по координатам
@@ -216,11 +229,17 @@ function start() {
 
         imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
 
+        // очищаем сообщение и реакцию иконки на копирование 
+        document.querySelector(".copy-btn svg path").style.fill = "#C0C0C0";
+        document.querySelector(".copied-message").style.display = "none"; 
+        
+
+
     }
 
-    // TODO - скопировать строку с координатами кнопкой
+    // TODO разбивать длинную строку на части
     // TODO дать возможность корректировать каждую цифру => меняется область выделения
 
 
-    
+
 }
