@@ -89,8 +89,15 @@ body {
 /* ! сделать плавающей но вне блока с изображением */
 .btn:hover {
     cursor: pointer;
-    background-color: rgb(211, 228, 255);
     border-radius: 3px;
+}
+
+.finish-btn:hover {
+    background-color: rgb(209, 250, 233);
+}
+
+.reset-btn:hover {
+    background-color: rgb(254, 222, 218);
 }
 
 .btn:disabled {
@@ -98,7 +105,7 @@ body {
     cursor: not-allowed;
 }
 
-.btn:disabled:hover {
+.btn:hover:disabled {
     background-color: rgba(239, 239, 239, 0.3);
 }
 
@@ -134,12 +141,12 @@ body {
     cursor: not-allowed;
 }
 
-.copy-btn:disabled svg:hover path {
-    fill: #C0C0C0;
+.copy-btn:hover svg path {
+    fill: #1fbc8c;
 }
 
-.copy-btn svg:hover path {
-    fill:rgb(60, 101, 166);
+.copy-btn:hover:disabled svg path {
+    fill: #C0C0C0;
 }
 
 .copied-message {

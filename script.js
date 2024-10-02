@@ -264,12 +264,10 @@ function start() {
 
         imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
 
-        // очищаем сообщение и реакцию иконки на копирование 
-        document.querySelector(".copy-btn svg path").style.fill = "#C0C0C0";
+        // делаем неактивной кнопку, очищаем сообщение и реакцию иконки на копирование 
+        copyBtn.setAttribute("disabled", "");
         document.querySelector(".copied-message").style.display = "none"; 
-        
-
-
+    
     }
 
     // TODO разбивать длинную строку на части
