@@ -175,7 +175,7 @@ function start() {
 
         //сделать активной кнопку копирования строки с координатами
         copyBtn.removeAttribute("disabled");
-        copyBtn.addEventListener("click",copyCoordStr);
+        copyBtn.addEventListener("click", function() { copyCoordStr(string) });
 
         // выделение полигона
         highlightPolygon(string);
@@ -208,12 +208,12 @@ function start() {
         return result.join(',\n'); // вывод массива строк (в конце строки запятая и перенос на новую строку)
     }
 
-    // * функция копирования строки с координатами
-    function copyCoordStr() {
+    // * функция копирования строки с координатами (в виде одной строки)
+    function copyCoordStr(str) {
         document.querySelector(".copy-btn svg path").style.fill = "#1fbc8c";
         document.querySelector(".copied-message").style.display = "block"; 
         
-        navigator.clipboard.writeText(coordStr.innerHTML);
+        navigator.clipboard.writeText(str);
     }
 
     // * функция выделения цветом и рамкой полигона по координатам
