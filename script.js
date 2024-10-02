@@ -44,7 +44,9 @@ function start() {
             finishBtn.removeAttribute("disabled");
         }
 
-        clickReaction(e); // реакция на клик мышки (вызов функции)
+        // точки кликов отмечаем большими кружками 20 х 20px
+        let diameter = 20;
+        addClickReaction(e,diameter); // реакция на клик мышки (вызов функции)
 
         let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
 
@@ -54,24 +56,40 @@ function start() {
     }
 
     // * функция отмечает каждую точку клика полупрозрачным кругом
-    function clickReaction(e) {
-        let x = e.pageX;
-        let y = e.pageY;
-
+    function addClickReaction(e,diameter) {
         let circleMark = document.createElement("div");
         circleMark.className = "circle-mark";
 
-        // высчитываем значения смещения круга с учетом размеров блока (20 x 20 px)
-        // top: calc(430px - 10px); 
-        // left: calc(323px - 10px);
-        let yPos = y - 10;
-        let xPos = x - 10;
+        let x = e.pageX;
+        let y = e.pageY;
 
-        circleMark.style.top = yPos + "px"; // Y
-        circleMark.style.left = xPos + "px"; // X
+        // через размер кружков рассчитать смещение позиционирования
+        correctCircleOffset(circleMark,diameter,x,y);
+
         circleMark.style.display = "block";
-
         document.querySelector(".photo").append(circleMark);
+    }
+
+    // * функция расчета смещения отображения круга в зависимости от его ширины 
+    // принимает элемент круга, его диаметр, координаты X и Y клика
+    function correctCircleOffset(circle,diameter,x,y) {
+            //console.log(diameter);
+            //console.log(x);
+            //console.log(y);
+
+        circle.style.width = diameter + "px";
+        circle.style.height = diameter + "px";
+
+        /* высчитываем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
+            top: calc(430px - 10px); 
+            left: calc(323px - 10px); */
+        let offset = diameter/2;
+
+        let yPos = y - offset;
+        let xPos = x - offset;
+
+        circle.style.top = yPos + "px"; // Y
+        circle.style.left = xPos + "px"; // X
     }
 
     // * функция получения координат
@@ -94,17 +112,23 @@ function start() {
         // больше не позволит получать координаты до очистки данных (перезагрузки)
         imageBlock.removeEventListener("click", getCoords); 
 
-        removeCircles(); // убираем кружки
+        changeCircles(objCoords); // изменяем кружки на более мелкие
         makeString(objCoords); // записываем координаты через запятую
     }
 
-    // * функция удаления кружков выделения точек
-    function removeCircles() {
+    // функция изменения размера кружков (принимает массив с координатами точек)
+    function changeCircles(objCoords) {
         let circles = document.querySelectorAll(".circle-mark");
         let circlesArr = Array.from(circles);
 
+        console.log(objCoords);
+
         for(let i = 0; i < circlesArr.length; i++) {
-            circlesArr[i].remove();
+            let x = objCoords[i+1][0];
+            let y = objCoords[i+1][1];
+
+            correctCircleOffset(circlesArr[i],5,x,y); // вызов функции
+            circlesArr[i].style.backgroundColor = "#ffffff";
         }
     }
 
@@ -256,6 +280,7 @@ function start() {
         if(poly) {
             poly.remove();
             document.querySelector(".photo svg").style.display = "none";
+            removeCircles();
         } else {
             removeCircles();
         }
@@ -269,8 +294,23 @@ function start() {
         coordStrExample.style.display = "block";
 
         imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
-    
+
+        // очищаем сообщение и реакцию иконки на копирование 
+        //document.querySelector(".copy-btn svg path").style.fill = "#C0C0C0";
+        document.querySelector(".copied-message").style.display = "none"; 
+        
+        // * функция удаления кружков выделения точек
+        function removeCircles() {
+            let circles = document.querySelectorAll(".circle-mark");
+            let circlesArr = Array.from(circles);
+
+            for(let i = 0; i < circlesArr.length; i++) {
+                circlesArr[i].remove();
+            }
+        }
+
     }
+
 
     // TODO разбивать длинную строку на части
     // TODO дать возможность корректировать каждую цифру => меняется область выделения
