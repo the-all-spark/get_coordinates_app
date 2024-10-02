@@ -1,8 +1,7 @@
 window.addEventListener("load", start);
 
 function start() {
-    console.log("Координаты арены: 323,430,539,430,538,618,322,618");
-
+    
     let imageBlock = document.querySelector(".photo img"); // изображение
     
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
@@ -132,7 +131,7 @@ function start() {
         }
     }
 
-    // * функция вывода блока информации с координатами
+    // * функция вывода блока информации с координатами (получает объект с точками и строку координат)
     function showCoords(object,string) {
 
         // вывод точек и их координат
@@ -159,7 +158,7 @@ function start() {
             ySpan.innerHTML = numY;
                 //console.log(ySpan);
 
-            //скрываем примеры, соединяем и выводим
+            //скрываем примеры, соединяем и выводим точки
             pointsExample.style.display = "none";
             coordStrExample.style.display = "none";
 
@@ -170,7 +169,8 @@ function start() {
         }
         
         // вывод строки координат
-        coordStr.innerHTML = string;
+        let N = 60; // лимит символов в строке //! зависит от ширины выведенного на страницу изображения
+        coordStr.innerHTML = divideStr(string,N);
         coordStr.style.color = "black"; 
 
         //сделать активной кнопку копирования строки с координатами
@@ -178,7 +178,34 @@ function start() {
         copyBtn.addEventListener("click",copyCoordStr);
 
         // выделение полигона
-        highlightPolygon(coordStr.innerHTML);
+        highlightPolygon(string);
+    }
+
+    // * функция разбивки строки с координатами
+    function divideStr(str,N) {
+        //console.log(str);
+
+        let numbersArr = str.trim().split(","); // разрезаем строку на массив чисел через запятую
+        //console.log(numbersArr);
+
+        let result = []; // массив для отдельных строк
+        let currentNumStr = numbersArr.shift(); // кладём первое число в текущую строку
+
+        // цикл по массиву цифр
+        for (let number of numbersArr) {
+            //если следующее число не укладывается в лимит или текущая строка сама больше лимита
+            if (currentNumStr.length + number.length >= N || currentNumStr.length >= N) {
+                result.push(currentNumStr); // строка обрывается и записывается в массив
+                currentNumStr = number; // начало новой строки
+            } else {
+                currentNumStr += ',' + number; //добавляем слово через запятую к текущей строке
+            }
+        }
+
+        result.push(currentNumStr); //остатки в текущей строке отправляются на выход
+        //console.log(result);
+
+        return result.join(',\n'); // вывод массива строк (в конце строки запятая и перенос на новую строку)
     }
 
     // * функция копирования строки с координатами
@@ -240,6 +267,7 @@ function start() {
     // TODO разбивать длинную строку на части
     // TODO дать возможность корректировать каждую цифру => меняется область выделения
 
+    // TODO кнопка обновить должна стать активной после начала клика по точкам
 
 
 }
