@@ -214,7 +214,7 @@ function start() {
 
     // * функция копирования строки с координатами (в виде одной строки)
     function copyCoordStr(str) {
-        document.querySelector(".copy-btn svg path").style.fill = "#1fbc8c";
+        copyBtn.classList.add("active"); //выделяет кнопку зеленым
         document.querySelector(".copied-message").style.display = "block"; 
         
         navigator.clipboard.writeText(str);
@@ -240,10 +240,16 @@ function start() {
     resetBtn.addEventListener("click", reset);
 
     function reset() {
-        // очищаем блок с точками, строку; делаем неактивной кнопку обновить
+        // очищаем блок с точками, строку; делаем неактивной кнопку обновить и завершить
         pointsBlock.innerHTML = "";
         coordStr.innerHTML = "";
         resetBtn.setAttribute("disabled", "");
+        finishBtn.setAttribute("disabled", "");
+
+        // делаем неактивной кнопку копирования, очищаем сообщение и реакцию иконки на копирование 
+        copyBtn.setAttribute("disabled", "");
+        copyBtn.classList.remove("active"); //удаляет выделение кнопки зеленым
+        document.querySelector(".copied-message").style.display = "none"; 
 
         // удаляем выделенный полигон, скрываем svg, если объект отмечен. Иначе - удаляем точки выделения
         let poly = document.querySelector(".photo svg polygon");
@@ -263,10 +269,6 @@ function start() {
         coordStrExample.style.display = "block";
 
         imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
-
-        // делаем неактивной кнопку, очищаем сообщение и реакцию иконки на копирование 
-        copyBtn.setAttribute("disabled", "");
-        document.querySelector(".copied-message").style.display = "none"; 
     
     }
 

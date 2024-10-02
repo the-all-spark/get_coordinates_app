@@ -141,6 +141,10 @@ body {
     cursor: not-allowed;
 }
 
+.copy-btn.active svg path {
+    fill: #1fbc8c;
+}
+
 .copy-btn:hover svg path {
     fill: #1fbc8c;
 }
