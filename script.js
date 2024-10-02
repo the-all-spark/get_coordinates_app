@@ -34,6 +34,11 @@ function start() {
 
     function getCoords(e) {
 
+        // разблокировка кнопки "Обновить"
+        if(resetBtn.getAttribute("disabled") === "") {
+            resetBtn.removeAttribute("disabled");
+        }
+
         // разблокировка кнопки "Завершить"
         if(finishBtn.getAttribute("disabled") === "") {
             finishBtn.removeAttribute("disabled");
@@ -89,19 +94,18 @@ function start() {
         // больше не позволит получать координаты до очистки данных (перезагрузки)
         imageBlock.removeEventListener("click", getCoords); 
 
-        // разблокировка кнопки "Обновить"
-        if(resetBtn.getAttribute("disabled") === "") {
-            resetBtn.removeAttribute("disabled");
-        }
+        removeCircles(); // убираем кружки
+        makeString(objCoords); // записываем координаты через запятую
+    }
 
-        // убираем кружки
+    // * функция удаления кружков выделения точек
+    function removeCircles() {
         let circles = document.querySelectorAll(".circle-mark");
         let circlesArr = Array.from(circles);
 
         for(let i = 0; i < circlesArr.length; i++) {
             circlesArr[i].remove();
         }
-        makeString(objCoords); // вызов функции
     }
 
     // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
@@ -241,11 +245,15 @@ function start() {
         coordStr.innerHTML = "";
         resetBtn.setAttribute("disabled", "");
 
-        // удаляем выделенный полигон, скрываем svg
+        // удаляем выделенный полигон, скрываем svg, если объект отмечен. Иначе - удаляем точки выделения
         let poly = document.querySelector(".photo svg polygon");
-        poly.remove();
-        document.querySelector(".photo svg").style.display = "none";
-
+        if(poly) {
+            poly.remove();
+            document.querySelector(".photo svg").style.display = "none";
+        } else {
+            removeCircles();
+        }
+        
         // очищаем объект с координатами точек
         objCoords = {}; 
         number = 0;
