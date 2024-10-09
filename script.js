@@ -1,321 +1,365 @@
 window.addEventListener("load", start);
 
 function start() {
-    
-    let imageBlock = document.querySelector(".photo img"); // изображение
-    
-    let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
-    let pointsExample = document.querySelector(".points-example"); // пример вывода точек
-    let coordStrExample = document.querySelector(".coord-str-example"); // пример вывода строки координат 
-    let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
 
-    let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
-    let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
-    let copyBtn = document.querySelector(".copy-btn"); // кнопка копирования строки
+    // * ---- Загрузка изображения на страницу
+    let submitBtn = document.querySelector(".submitting-form button");
+    submitBtn.addEventListener("click", submit);
 
-    let objCoords = {}; // пустой объект с координатами
-    let number = 0; // начальное значение для имени ключа
+    function submit() {
+        console.log("Загрузить изображение");
+        
+        let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
 
-    // * ---- Вывести размеры загруженного изображения
-    //console.log(`ширина: ${imageBlock.clientWidth}`);
-    //console.log(`высота: ${imageBlock.clientHeight}`);
-
-    let wElem = document.querySelector(".width-size");
-    let hElem = document.querySelector(".height-size");
-
-    let w = imageBlock.clientWidth;
-    let h = imageBlock.clientHeight;
-
-    wElem.append(w);
-    hElem.append(h);
-
-    // * ---- Получить и сохранить координаты при клике на изображение
-    imageBlock.addEventListener("click", getCoords);
-
-    function getCoords(e) {
-
-        // разблокировка кнопки "Обновить"
-        if(resetBtn.getAttribute("disabled") === "") {
-            resetBtn.removeAttribute("disabled");
+        // создание элемента img на страницу
+        // <img src="./assets/outside_general_1000.jpg" alt="Изображение">
+        let img = document.createElement('img');
+        img.setAttribute("id","image");
+        
+        // запись данных в хранилище localStorage в формате (ключ, значение)
+        if(imgFile) {
+            img.src = URL.createObjectURL(imgFile); // присваивание URL -> src
+            localStorage.setItem("loadedImage", img.src);
         }
 
-        // разблокировка кнопки "Завершить"
-        if(finishBtn.getAttribute("disabled") === "") {
-            finishBtn.removeAttribute("disabled");
+        // получение данных из localStorage, присваивание значений свойствам элемента img
+        img.src = localStorage.getItem("loadedImage");
+        img.alt = "Изображение";
+
+        let container = document.querySelector('.photo');
+        container.prepend(img);
+
+        document.querySelector(".submitting-form").style.display = "none";                  // ! отобразить при обновлении
+
+        let image = document.querySelector('.photo img');
+        image.addEventListener("load", getInfo); // обработка события после загрузки изображения 
+
+    }
+
+    // * ---- Выполнение последующего кода только после того, как загружено изображение
+    function getInfo() {
+
+        console.log("Показать информацию");
+
+        let imageBlock = document.querySelector(".photo img"); // изображение     
+        
+        let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
+        let pointsExample = document.querySelector(".points-example"); // пример вывода точек
+        let coordStrExample = document.querySelector(".coord-str-example"); // пример вывода строки координат 
+        let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
+
+        let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
+        let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
+        let copyBtn = document.querySelector(".copy-btn"); // кнопка копирования строки
+
+        let objCoords = {}; // пустой объект с координатами
+        let number = 0; // начальное значение для имени ключа
+
+        // * ---- Вывести размеры загруженного изображения
+        //console.log(`ширина: ${imageBlock.clientWidth}`);
+        //console.log(`высота: ${imageBlock.clientHeight}`);
+
+        if(imageBlock.complete) {
+            //console.log(imageBlock.complete); // true если изображение загружено
+
+            let wElem = document.querySelector(".width-size");
+            let hElem = document.querySelector(".height-size");
+
+            let w = imageBlock.clientWidth;
+            let h = imageBlock.clientHeight;
+
+            wElem.append(w);
+            hElem.append(h);
         }
 
-        // точки кликов отмечаем большими кружками 20 х 20px
-        let diameter = 20;
-        addClickReaction(e,diameter); // реакция на клик мышки (вызов функции)
+        // * ---- Получить и сохранить координаты при клике на изображение
+        imageBlock.addEventListener("click", getCoords);
 
-        let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
+        function getCoords(e) {
 
-        number++;
-        objCoords = savePoint(number, coords); // сохраняем координаты под порядковым номеров в объекте (вызов функции) 
-        //console.log(objCoords);
-    }
-
-    // * функция отмечает каждую точку клика полупрозрачным кругом
-    function addClickReaction(e,diameter) {
-        let circleMark = document.createElement("div");
-        circleMark.className = "circle-mark";
-
-        let x = e.pageX;
-        let y = e.pageY;
-
-        // через размер кружков рассчитать смещение позиционирования
-        correctCircleOffset(circleMark,diameter,x,y);
-
-        circleMark.style.display = "block";
-        document.querySelector(".photo").append(circleMark);
-    }
-
-    // * функция расчета смещения отображения круга в зависимости от его ширины 
-    // принимает элемент круга, его диаметр, координаты X и Y клика
-    function correctCircleOffset(circle,diameter,x,y) {
-            //console.log(diameter);
-            //console.log(x);
-            //console.log(y);
-
-        circle.style.width = diameter + "px";
-        circle.style.height = diameter + "px";
-
-        /* высчитываем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
-            top: calc(430px - 10px); 
-            left: calc(323px - 10px); */
-        let offset = diameter/2;
-
-        let yPos = y - offset;
-        let xPos = x - offset;
-
-        circle.style.top = yPos + "px"; // Y
-        circle.style.left = xPos + "px"; // X
-    }
-
-    // * функция получения координат
-    function getPosition(e) {
-        let x = e.pageX;
-        let y = e.pageY;
-        return [x, y];
-    }
-
-    // * функция сохранения координат
-    function savePoint(number, coordinates) {
-        objCoords[number] = coordinates; // имя переменной - порядковый номер, свойство - координаты точки (массив)
-        return objCoords;
-    }
-
-    // * ----- При клике на кнопку "Завершить" - вывести координаты
-    finishBtn.addEventListener("click", prepare);
-    
-    function prepare() {
-        // больше не позволит получать координаты до очистки данных (перезагрузки)
-        imageBlock.removeEventListener("click", getCoords); 
-
-        changeCircles(objCoords); // изменяем кружки на более мелкие
-        makeString(objCoords); // записываем координаты через запятую
-    }
-
-    // функция изменения размера кружков (принимает массив с координатами точек)
-    function changeCircles(objCoords) {
-        let circles = document.querySelectorAll(".circle-mark");
-        let circlesArr = Array.from(circles);
-
-        console.log(objCoords);
-
-        for(let i = 0; i < circlesArr.length; i++) {
-            let x = objCoords[i+1][0];
-            let y = objCoords[i+1][1];
-
-            correctCircleOffset(circlesArr[i],5,x,y); // вызов функции
-            circlesArr[i].style.backgroundColor = "#ffffff";
-        }
-    }
-
-    // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
-    function makeString(obj) {
-        //console.log(obj);
-
-        if(finishBtn.getAttribute("disabled") === null) {
-
-            // делаем кнопку неактивной
-            finishBtn.setAttribute("disabled", "");
-           
-            let coordStr = ""; // пустая строка для вывода
-            let objLength = Object.keys(obj).length; // количество свойств в объекте
-
-            // перебор свойств объектов
-            for (let prop in obj) {
-                //console.log(obj[prop]);   // значение
-                //console.log(prop);        // ключ
-
-                if (prop == objLength) {
-                    coordStr += obj[prop].join(","); // если пара ключ=значение последняя, запятая не ставится
-                } else {
-                    coordStr += obj[prop].join(",") + ","; 
-                }
+            // разблокировка кнопки "Обновить"
+            if(resetBtn.getAttribute("disabled") === "") {
+                resetBtn.removeAttribute("disabled");
             }
-            showCoords(obj,coordStr);  // вызов функции вывода строки
-        }
-    }
 
-    // * функция вывода блока информации с координатами (получает объект с точками и строку координат)
-    function showCoords(object,string) {
-
-        // вывод точек и их координат
-        // <span>Точка 1:</span> <span class="coord">x = 228,</span> <span class="coord">y = 788</span>
-        for (let prop in object) {
-            
-            // заголовок с номером точки
-            let pointNumSpan = document.createElement("span");
-            let pointNum = `Точка ${prop}: `;
-            pointNumSpan.prepend(pointNum);
-                //console.log(pointNumSpan);
-
-            //координата X
-            let xSpan = document.createElement("span");
-            xSpan.className = "coord";
-            let numX = ` x = ${object[prop][0]},`;
-            xSpan.innerHTML = numX;
-                //console.log(xSpan);
-
-            //координата Y
-            let ySpan = document.createElement("span");
-            ySpan.className = "coord";
-            let numY = ` y = ${object[prop][1]}`;
-            ySpan.innerHTML = numY;
-                //console.log(ySpan);
-
-            //скрываем примеры, соединяем и выводим точки
-            pointsExample.style.display = "none";
-            coordStrExample.style.display = "none";
-
-            pointsBlock.append(pointNumSpan);
-            pointsBlock.append(xSpan);
-            pointsBlock.append(ySpan);
-            pointsBlock.insertAdjacentHTML("beforeend","</br>");
-        }
-        
-        // вывод строки координат
-        let N = 60; // лимит символов в строке //! зависит от ширины выведенного на страницу изображения
-        coordStr.innerHTML = divideStr(string,N);
-        coordStr.style.color = "black"; 
-
-        //сделать активной кнопку копирования строки с координатами
-        copyBtn.removeAttribute("disabled");
-        copyBtn.addEventListener("click", function() { copyCoordStr(string) });
-
-        // выделение полигона
-        highlightPolygon(string);
-    }
-
-    // * функция разбивки строки с координатами
-    function divideStr(str,N) {
-        //console.log(str);
-
-        let numbersArr = str.trim().split(","); // разрезаем строку на массив чисел через запятую
-        //console.log(numbersArr);
-
-        let result = []; // массив для отдельных строк
-        let currentNumStr = numbersArr.shift(); // кладём первое число в текущую строку
-
-        // цикл по массиву цифр
-        for (let number of numbersArr) {
-            //если следующее число не укладывается в лимит или текущая строка сама больше лимита
-            if (currentNumStr.length + number.length >= N || currentNumStr.length >= N) {
-                result.push(currentNumStr); // строка обрывается и записывается в массив
-                currentNumStr = number; // начало новой строки
-            } else {
-                currentNumStr += ',' + number; //добавляем слово через запятую к текущей строке
+            // разблокировка кнопки "Завершить"
+            if(finishBtn.getAttribute("disabled") === "") {
+                finishBtn.removeAttribute("disabled");
             }
+
+            // точки кликов отмечаем большими кружками 20 х 20px
+            let diameter = 20;
+            addClickReaction(e,diameter); // реакция на клик мышки (вызов функции)
+
+            let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
+
+            number++;
+            objCoords = savePoint(number, coords); // сохраняем координаты под порядковым номеров в объекте (вызов функции) 
+            //console.log(objCoords);
         }
 
-        result.push(currentNumStr); //остатки в текущей строке отправляются на выход
-        //console.log(result);
+        // * функция отмечает каждую точку клика полупрозрачным кругом
+        function addClickReaction(e,diameter) {
+            let circleMark = document.createElement("div");
+            circleMark.className = "circle-mark";
 
-        return result.join(',\n'); // вывод массива строк (в конце строки запятая и перенос на новую строку)
-    }
+            let x = e.pageX;
+            let y = e.pageY;
 
-    // * функция копирования строки с координатами (в виде одной строки)
-    function copyCoordStr(str) {
-        copyBtn.classList.add("active"); //выделяет кнопку зеленым
-        document.querySelector(".copied-message").style.display = "block"; 
-        
-        navigator.clipboard.writeText(str);
-    }
+            // через размер кружков рассчитать смещение позиционирования
+            correctCircleOffset(circleMark,diameter,x,y);
 
-    // * функция выделения цветом и рамкой полигона по координатам
-    function highlightPolygon(str) {
-            //console.log(str);
-
-        let svgBlock = document.querySelector(".photo svg");
-       
-        let polygonElem = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        polygonElem.setAttribute("points", str);
-            //console.log(polygonElem);
-
-        svgBlock.append(polygonElem);
-            //console.log(svgBlock);
-
-        svgBlock.style.display = "block";  
-    }
-
-    // * ----- Сброс данных при клике на кнопку "Обновить"
-    resetBtn.addEventListener("click", reset);
-
-    function reset() {
-        // очищаем блок с точками, строку; делаем неактивной кнопку обновить и завершить
-        pointsBlock.innerHTML = "";
-        coordStr.innerHTML = "";
-        resetBtn.setAttribute("disabled", "");
-        finishBtn.setAttribute("disabled", "");
-
-        // делаем неактивной кнопку копирования, очищаем сообщение и реакцию иконки на копирование 
-        copyBtn.setAttribute("disabled", "");
-        copyBtn.classList.remove("active"); //удаляет выделение кнопки зеленым
-        document.querySelector(".copied-message").style.display = "none"; 
-
-        // удаляем выделенный полигон, скрываем svg, если объект отмечен. Иначе - удаляем точки выделения
-        let poly = document.querySelector(".photo svg polygon");
-        if(poly) {
-            poly.remove();
-            document.querySelector(".photo svg").style.display = "none";
-            removeCircles();
-        } else {
-            removeCircles();
+            circleMark.style.display = "block";
+            document.querySelector(".photo").append(circleMark);
         }
-        
-        // очищаем объект с координатами точек
-        objCoords = {}; 
-        number = 0;
-        
-        // возвращаем примеры
-        pointsExample.style.display = "block";
-        coordStrExample.style.display = "block";
 
-        imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
+        // * функция расчета смещения отображения круга в зависимости от его ширины 
+        // принимает элемент круга, его диаметр, координаты X и Y клика
+        function correctCircleOffset(circle,diameter,x,y) {
+                //console.log(diameter);
+                //console.log(x);
+                //console.log(y);
 
-        // очищаем сообщение и реакцию иконки на копирование 
-        //document.querySelector(".copy-btn svg path").style.fill = "#C0C0C0";
-        document.querySelector(".copied-message").style.display = "none"; 
+            circle.style.width = diameter + "px";
+            circle.style.height = diameter + "px";
+
+            /* высчитываем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
+                top: calc(430px - 10px); 
+                left: calc(323px - 10px); */
+            let offset = diameter/2;
+
+            let yPos = y - offset;
+            let xPos = x - offset;
+
+            circle.style.top = yPos + "px"; // Y
+            circle.style.left = xPos + "px"; // X
+        }
+
+        // * функция получения координат
+        function getPosition(e) {
+            let x = e.pageX;
+            let y = e.pageY;
+            return [x, y];
+        }
+
+        // * функция сохранения координат
+        function savePoint(number, coordinates) {
+            objCoords[number] = coordinates; // имя переменной - порядковый номер, свойство - координаты точки (массив)
+            return objCoords;
+        }
+
+        // * ----- При клике на кнопку "Завершить" - вывести координаты
+        finishBtn.addEventListener("click", prepare);
         
-        // * функция удаления кружков выделения точек
-        function removeCircles() {
+        function prepare() {
+            // больше не позволит получать координаты до очистки данных (перезагрузки)
+            imageBlock.removeEventListener("click", getCoords); 
+
+            changeCircles(objCoords); // изменяем кружки на более мелкие
+            makeString(objCoords); // записываем координаты через запятую
+        }
+
+        // функция изменения размера кружков (принимает массив с координатами точек)
+        function changeCircles(objCoords) {
             let circles = document.querySelectorAll(".circle-mark");
             let circlesArr = Array.from(circles);
 
+            console.log(objCoords);
+
             for(let i = 0; i < circlesArr.length; i++) {
-                circlesArr[i].remove();
+                let x = objCoords[i+1][0];
+                let y = objCoords[i+1][1];
+
+                correctCircleOffset(circlesArr[i],5,x,y); // вызов функции
+                circlesArr[i].style.backgroundColor = "#ffffff";
             }
         }
 
+        // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
+        function makeString(obj) {
+            //console.log(obj);
+
+            if(finishBtn.getAttribute("disabled") === null) {
+
+                // делаем кнопку неактивной
+                finishBtn.setAttribute("disabled", "");
+            
+                let coordStr = ""; // пустая строка для вывода
+                let objLength = Object.keys(obj).length; // количество свойств в объекте
+
+                // перебор свойств объектов
+                for (let prop in obj) {
+                    //console.log(obj[prop]);   // значение
+                    //console.log(prop);        // ключ
+
+                    if (prop == objLength) {
+                        coordStr += obj[prop].join(","); // если пара ключ=значение последняя, запятая не ставится
+                    } else {
+                        coordStr += obj[prop].join(",") + ","; 
+                    }
+                }
+                showCoords(obj,coordStr);  // вызов функции вывода строки
+            }
+        }
+
+        // * функция вывода блока информации с координатами (получает объект с точками и строку координат)
+        function showCoords(object,string) {
+
+            // вывод точек и их координат
+            // <span>Точка 1:</span> <span class="coord">x = 228,</span> <span class="coord">y = 788</span>
+            for (let prop in object) {
+                
+                // заголовок с номером точки
+                let pointNumSpan = document.createElement("span");
+                let pointNum = `Точка ${prop}: `;
+                pointNumSpan.prepend(pointNum);
+                    //console.log(pointNumSpan);
+
+                //координата X
+                let xSpan = document.createElement("span");
+                xSpan.className = "coord";
+                let numX = ` x = ${object[prop][0]},`;
+                xSpan.innerHTML = numX;
+                    //console.log(xSpan);
+
+                //координата Y
+                let ySpan = document.createElement("span");
+                ySpan.className = "coord";
+                let numY = ` y = ${object[prop][1]}`;
+                ySpan.innerHTML = numY;
+                    //console.log(ySpan);
+
+                //скрываем примеры, соединяем и выводим точки
+                pointsExample.style.display = "none";
+                coordStrExample.style.display = "none";
+
+                pointsBlock.append(pointNumSpan);
+                pointsBlock.append(xSpan);
+                pointsBlock.append(ySpan);
+                pointsBlock.insertAdjacentHTML("beforeend","</br>");
+            }
+            
+            // вывод строки координат
+            let N = 60; // лимит символов в строке //! зависит от ширины выведенного на страницу изображения
+            coordStr.innerHTML = divideStr(string,N);
+            coordStr.style.color = "black"; 
+
+            //сделать активной кнопку копирования строки с координатами
+            copyBtn.removeAttribute("disabled");
+            copyBtn.addEventListener("click", function() { copyCoordStr(string) });
+
+            // выделение полигона
+            highlightPolygon(string);
+        }
+
+        // * функция разбивки строки с координатами
+        function divideStr(str,N) {
+            //console.log(str);
+
+            let numbersArr = str.trim().split(","); // разрезаем строку на массив чисел через запятую
+            //console.log(numbersArr);
+
+            let result = []; // массив для отдельных строк
+            let currentNumStr = numbersArr.shift(); // кладём первое число в текущую строку
+
+            // цикл по массиву цифр
+            for (let number of numbersArr) {
+                //если следующее число не укладывается в лимит или текущая строка сама больше лимита
+                if (currentNumStr.length + number.length >= N || currentNumStr.length >= N) {
+                    result.push(currentNumStr); // строка обрывается и записывается в массив
+                    currentNumStr = number; // начало новой строки
+                } else {
+                    currentNumStr += ',' + number; //добавляем слово через запятую к текущей строке
+                }
+            }
+
+            result.push(currentNumStr); //остатки в текущей строке отправляются на выход
+            //console.log(result);
+
+            return result.join(',\n'); // вывод массива строк (в конце строки запятая и перенос на новую строку)
+        }
+
+        // * функция копирования строки с координатами (в виде одной строки)
+        function copyCoordStr(str) {
+            copyBtn.classList.add("active"); //выделяет кнопку зеленым
+            document.querySelector(".copied-message").style.display = "block"; 
+            
+            navigator.clipboard.writeText(str);
+        }
+
+        // * функция выделения цветом и рамкой полигона по координатам
+        function highlightPolygon(str) {
+                //console.log(str);
+
+            let svgBlock = document.querySelector(".photo svg");
+        
+            let polygonElem = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            polygonElem.setAttribute("points", str);
+                //console.log(polygonElem);
+
+            svgBlock.append(polygonElem);
+                //console.log(svgBlock);
+
+            svgBlock.style.display = "block";  
+        }
+
+        // * ----- Сброс данных при клике на кнопку "Обновить"
+        resetBtn.addEventListener("click", reset);
+
+        function reset() {
+            // очищаем блок с точками, строку; делаем неактивной кнопку обновить и завершить
+            pointsBlock.innerHTML = "";
+            coordStr.innerHTML = "";
+            resetBtn.setAttribute("disabled", "");
+            finishBtn.setAttribute("disabled", "");
+
+            // делаем неактивной кнопку копирования, очищаем сообщение и реакцию иконки на копирование 
+            copyBtn.setAttribute("disabled", "");
+            copyBtn.classList.remove("active"); //удаляет выделение кнопки зеленым
+            document.querySelector(".copied-message").style.display = "none"; 
+
+            // удаляем выделенный полигон, скрываем svg, если объект отмечен. Иначе - удаляем точки выделения
+            let poly = document.querySelector(".photo svg polygon");
+            if(poly) {
+                poly.remove();
+                document.querySelector(".photo svg").style.display = "none";
+                removeCircles();
+            } else {
+                removeCircles();
+            }
+            
+            // очищаем объект с координатами точек
+            objCoords = {}; 
+            number = 0;
+            
+            // возвращаем примеры
+            pointsExample.style.display = "block";
+            coordStrExample.style.display = "block";
+
+            imageBlock.addEventListener("click", getCoords); // возвращаем обработчик события
+
+            // очищаем сообщение и реакцию иконки на копирование 
+            //document.querySelector(".copy-btn svg path").style.fill = "#C0C0C0";
+            document.querySelector(".copied-message").style.display = "none"; 
+            
+            // * функция удаления кружков выделения точек
+            function removeCircles() {
+                let circles = document.querySelectorAll(".circle-mark");
+                let circlesArr = Array.from(circles);
+
+                for(let i = 0; i < circlesArr.length; i++) {
+                    circlesArr[i].remove();
+                }
+            }
+
+        }
+
+        // TODO дать возможность корректировать каждую цифру => меняется область выделения
+
+        // TODO очистка хранилища 
+        //window.localStorage.clear();
+        //console.log(localStorage);
+
     }
-
-
-    // TODO разбивать длинную строку на части
-    // TODO дать возможность корректировать каждую цифру => меняется область выделения
-
-    // TODO кнопка обновить должна стать активной после начала клика по точкам
-
 
 }
