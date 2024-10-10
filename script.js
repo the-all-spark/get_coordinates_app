@@ -50,9 +50,11 @@ function start() {
 
     // * ---- Выполнение последующего кода только после того, как загружено изображение
     function getInfo() {
-
         console.log("Показать информацию");
 
+        let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
+        let sizeLineMessage = document.querySelector(" .size-line-message");
+       
         let imageBlock = document.querySelector(".photo img"); // изображение     
         
         let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
@@ -83,6 +85,8 @@ function start() {
             wElem.append(w);
             hElem.append(h);
         }
+        sizeLine.style.display = "block";
+        sizeLineMessage.style.display = "none";
 
         // * ---- Получить и сохранить координаты при клике на изображение
         imageBlock.addEventListener("click", getCoords);

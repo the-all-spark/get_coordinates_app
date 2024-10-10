@@ -104,6 +104,11 @@ body {
 
 .size-line {
     position: relative;
+    display: none;
+}
+
+.size-line-message {
+    color: rgb(151, 151, 151);
 }
 
 .size-string {
