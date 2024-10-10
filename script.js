@@ -2,37 +2,49 @@ window.addEventListener("load", start);
 
 function start() {
 
+    window.localStorage.clear(); // очищаем хранилище
+
     // * ---- Загрузка изображения на страницу
     let submitBtn = document.querySelector(".submitting-form button");
     submitBtn.addEventListener("click", submit);
 
     function submit() {
         console.log("Загрузить изображение");
-        
+
         let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
+        let error = document.querySelector('.submit-error');
 
-        // создание элемента img на страницу
-        // <img src="./assets/outside_general_1000.jpg" alt="Изображение">
-        let img = document.createElement('img');
-        img.setAttribute("id","image");
-        
-        // запись данных в хранилище localStorage в формате (ключ, значение)
-        if(imgFile) {
-            img.src = URL.createObjectURL(imgFile); // присваивание URL -> src
-            localStorage.setItem("loadedImage", img.src);
+        // если изображение выбрано =>
+        if(imgFile !== undefined) {
+            error.style.display = "none";
+
+            // создание элемента img на страницу
+            // <img src="./assets/outside_general_1000.jpg" alt="Изображение">
+            let img = document.createElement('img');
+            img.setAttribute("id","image");
+            
+            // запись данных в хранилище localStorage в формате (ключ, значение)
+            if(imgFile) {
+                img.src = URL.createObjectURL(imgFile); // присваивание URL -> src
+                localStorage.setItem("loadedImage", img.src);
+            }
+
+            // получение данных из localStorage, присваивание значений свойствам элемента img
+            img.src = localStorage.getItem("loadedImage");
+            img.alt = "Изображение";
+
+            let container = document.querySelector('.photo');
+            container.prepend(img);
+
+            document.querySelector(".submitting-form").style.display = "none";                  // ! отобразить при обновлении
+
+            let image = document.querySelector('.photo img');
+            image.addEventListener("load", getInfo); // обработка события после загрузки изображения
+
+        } else {
+            // если изображение не выбрано -> ошибка
+            error.style.display = "block";
         }
-
-        // получение данных из localStorage, присваивание значений свойствам элемента img
-        img.src = localStorage.getItem("loadedImage");
-        img.alt = "Изображение";
-
-        let container = document.querySelector('.photo');
-        container.prepend(img);
-
-        document.querySelector(".submitting-form").style.display = "none";                  // ! отобразить при обновлении
-
-        let image = document.querySelector('.photo img');
-        image.addEventListener("load", getInfo); // обработка события после загрузки изображения 
 
     }
 
