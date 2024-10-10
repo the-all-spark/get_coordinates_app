@@ -8,7 +8,7 @@ body {
     display: grid;
     grid-template-areas: "photo info";
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 100%;
     column-gap: 20px;
 }
 
@@ -16,16 +16,50 @@ body {
     margin-bottom: 30px;
 }
 
+/* -- Форма загрузки изображения -- */
+
+.submitting-form {
+    width: 40%;
+    border: 1px solid rgb(151, 151, 151);
+    padding: 40px;
+    margin: 0 auto;
+    align-self: center;
+}
+
+.submitting-form p {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.submitting-form button {
+    display: block;
+    margin-left: auto;
+}
+
+.submitting-form .submit-error {
+    display: none;
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: red;
+    text-align: center;
+}
+
+.submitting-form button:hover {
+    background-color: rgb(209, 250, 233);
+}
+
 /* -------------------- Изображение -------------------- */
 
 .photo {
     grid-area: photo;
     position: relative;
+    /*display: flex;*/
+    display: grid;
 }
 
 .photo img {
     width: 1000px;
-    height: auto;
+    /*height: auto;*/ 
 }
 
 .circle-mark {
@@ -40,6 +74,7 @@ body {
     left: 0;
 }
 
+/* ! размеры svg должны быть под загруженное изображение но не меньше его!! */
 .photo svg {
     display: none;
     position: absolute;
