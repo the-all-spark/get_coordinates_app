@@ -117,7 +117,7 @@ body {
     border: 1px solid black;
 }
 
-/* ----- Вывод координат, кнопка "Завершить" ------- */
+/* ----- Вывод координат, кнопки "Завершить", "Обновить" ------- */
 
 .coordinate-block {
     position: relative;
@@ -145,6 +145,10 @@ body {
     background-color: rgb(254, 222, 218);
 }
 
+.change-image-btn:hover {
+    background-color: rgb(254, 222, 218);
+} 
+
 .btn:disabled {
     border-radius: 3px;
     cursor: not-allowed;
@@ -164,6 +168,14 @@ body {
     position: absolute;
     bottom: -30px;
     right: 0;
+}
+
+.change-image-btn {
+    display: none;
+    width: 140px;
+    position: absolute;
+    bottom: -100px;
+    left: 0;
 }
 
 /* Кнопка скопировать строку кода */
