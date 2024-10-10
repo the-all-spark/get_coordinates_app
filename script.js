@@ -1,7 +1,6 @@
 window.addEventListener("load", start);
 
 function start() {
-
     window.localStorage.clear(); // очищаем хранилище
 
     // * ---- Загрузка изображения на страницу
@@ -19,7 +18,6 @@ function start() {
             error.style.display = "none";
 
             // создание элемента img на страницу
-            // <img src="./assets/outside_general_1000.jpg" alt="Изображение">
             let img = document.createElement('img');
             img.setAttribute("id","image");
             
@@ -36,7 +34,7 @@ function start() {
             let container = document.querySelector('.photo');
             container.prepend(img);
 
-            document.querySelector(".submitting-form").style.display = "none";                  // ! отобразить при обновлении
+            document.querySelector(".submitting-form").style.display = "none";
 
             let image = document.querySelector('.photo img');
             image.addEventListener("load", getInfo); // обработка события после загрузки изображения
@@ -65,9 +63,14 @@ function start() {
         let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
         let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
         let copyBtn = document.querySelector(".copy-btn"); // кнопка копирования строки
+        let changeImageBtn = document.querySelector(".change-image-btn"); // кнопка "Загрузить другое изображение"
 
         let objCoords = {}; // пустой объект с координатами
         let number = 0; // начальное значение для имени ключа
+
+        // * ---- Отобразить кнопку "Загрузить другое изображение"
+        changeImageBtn.style.display = "block";
+        changeImageBtn.addEventListener("click", changeImage);
 
         // * ---- Вывести размеры загруженного изображения
         //console.log(`ширина: ${imageBlock.clientWidth}`);
@@ -139,7 +142,7 @@ function start() {
             circle.style.width = diameter + "px";
             circle.style.height = diameter + "px";
 
-            /* высчитываем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
+            /* вычисляем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
                 top: calc(430px - 10px); 
                 left: calc(323px - 10px); */
             let offset = diameter/2;
@@ -161,34 +164,46 @@ function start() {
         // * функция сохранения координат
         function savePoint(number, coordinates) {
             objCoords[number] = coordinates; // имя переменной - порядковый номер, свойство - координаты точки (массив)
+            console.log(objCoords);
+    
             return objCoords;
         }
 
         // * ----- При клике на кнопку "Завершить" - вывести координаты
+        //console.log(objCoords);
+
         finishBtn.addEventListener("click", prepare);
+        //finishBtn.addEventListener("click", function() { prepare(objCoords) });
         
         function prepare() {
+        //function prepare(objCoords) {
             // больше не позволит получать координаты до очистки данных (перезагрузки)
             imageBlock.removeEventListener("click", getCoords); 
 
+            //console.log(objCoords); // ! пустой
+
             changeCircles(objCoords); // изменяем кружки на более мелкие
             makeString(objCoords); // записываем координаты через запятую
+            
         }
 
         // функция изменения размера кружков (принимает массив с координатами точек)
-        function changeCircles(objCoords) {
+        function changeCircles(obj) {
             let circles = document.querySelectorAll(".circle-mark");
             let circlesArr = Array.from(circles);
 
-            console.log(objCoords);
+            let newDiam = 5;
+            //console.log(obj); // ! пустой
 
             for(let i = 0; i < circlesArr.length; i++) {
-                let x = objCoords[i+1][0];
-                let y = objCoords[i+1][1];
 
-                correctCircleOffset(circlesArr[i],5,x,y); // вызов функции
+                let x = obj[i+1][0];
+                let y = obj[i+1][1];
+
+                correctCircleOffset(circlesArr[i],newDiam,x,y); // вызов функции
                 circlesArr[i].style.backgroundColor = "#ffffff";
             }
+            
         }
 
         // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
@@ -346,6 +361,7 @@ function start() {
             
             // очищаем объект с координатами точек
             objCoords = {}; 
+            //objCoords = null;
             number = 0;
             
             // возвращаем примеры
@@ -368,6 +384,22 @@ function start() {
                 }
             }
 
+        }
+
+        // * функция загрузки другого изображения (сброс данных, вывод формы загрузки файла)
+        function changeImage() {
+            console.log("Замена изображения");
+            reset(); // сброс данных
+
+            changeImageBtn.style.display = "none";
+
+            document.querySelector(".width-size").innerHTML = "";
+            document.querySelector(".height-size").innerHTML = "";
+            sizeLine.style.display = "none";
+            sizeLineMessage.style.display = "block";
+
+            imageBlock.remove();
+            document.querySelector(".submitting-form").style.display = "block";
         }
 
         // TODO дать возможность корректировать каждую цифру => меняется область выделения
