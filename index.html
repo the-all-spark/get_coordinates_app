@@ -18,7 +18,7 @@
             <!-- * Форма загрузки изображения -->
             <div class="submitting-form">
                 <p><b>Выберите изображение:</b></p>
-                <input type="file" id="file"/> <br><br>
+                <input type="file" id="file" /> <br><br>
                 <button class="btn">Загрузить</button>
                 <p class="submit-error">Вы не выбрали ни одного файла!</p>
             </div>
@@ -35,17 +35,22 @@
 
             <div class="block">
                 <p><b>Размер изображения</b> (ширина, высота):</p>
-                <div class="size-line-message">(после загрузки изображения здесь появятся его размеры в px)</div>
+                <div class="size-line-message">
+                    (после загрузки изображения здесь появятся его размеры в px)
+                </div>
                 <div class="size-line">
-                    <span class="size-string width-size"></span> x <span class="size-string height-size"></span> px
+                    <span class="size-string width-size"></span>
+                    x
+                    <span class="size-string height-size"></span>
+                    px
                 </div>
             </div>
 
             <div class="block"><b>Как пользоваться?</b>
                 <ul>
                     <li style="color:red;"><b>загрузите изображение</b> через форму слева;</li>
-                    <li>для получения координат x,y объекта кликните курсором мышки на нужную точку изображения
-                        (выделится кругом);</li>
+                    <li>для получения координат x,y объекта кликните курсором мышки на нужную точку
+                        изображения (выделится кругом);</li>
                     <li>двигайтесь по часовой стрелке, щелкая курсором, где необходимо;</li>
                     <li>для сохранения координат нажмите на кнопку <b>"Завершить"</b> ниже;</li>
                     <li>для копирования строки с координатами кликните на <b>иконку копирования</b> под строкой;</li>
@@ -58,8 +63,11 @@
                 <p><b>Координаты объекта:</b></p>
                 <button class="finish-btn btn" disabled>Завершить</button>
 
-                <p class="points-example example">Например, <br> Точка 1: x = 323, y = 430 <br> Точка 2: x = 539, y =
-                    430</p>
+                <p class="points-example example">Например, <br>
+                    Точка 1: x = 323, y = 430 <br>
+                    Точка 2: x = 539, y = 430
+                </p>
+                
                 <div class="points">
                     <!-- * Сюда будут добавляться координаты по точкам -->
                 </div>

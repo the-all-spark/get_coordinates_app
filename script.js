@@ -4,12 +4,13 @@ function start() {
     window.localStorage.clear(); // очищаем хранилище
 
     let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
-    let sizeLineMessage = document.querySelector(" .size-line-message");
+    let sizeLineMessage = document.querySelector(".size-line-message");
     
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
+    let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
+
     let pointsExample = document.querySelector(".points-example"); // пример вывода точек
     let coordStrExample = document.querySelector(".coord-str-example"); // пример вывода строки координат 
-    let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
 
     let finishBtn = document.querySelector(".finish-btn"); // кнопка "Завершить"
     let resetBtn = document.querySelector(".reset-btn"); // кнопка "Обновить"
@@ -17,48 +18,51 @@ function start() {
     let changeImageBtn = document.querySelector(".change-image-btn"); // кнопка "Загрузить другое изображение"
 
     let objCoords = {}; // пустой объект с координатами
-    let number = 0; // начальное значение для имени ключа
+    let number = 0; // начальное значение для имени ключа в объекте
 
     // * ---- Загрузка изображения на страницу
     let submitBtn = document.querySelector(".submitting-form button");
-    submitBtn.addEventListener("click", submit);
+    submitBtn.addEventListener("click", submitImage);
 
-    function submit() {
+    function submitImage() {
         console.log("Загрузить изображение");
 
-        let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
         let error = document.querySelector('.submit-error');
 
+        let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
+        
         // если изображение выбрано =>
-        if(imgFile !== undefined) {
+        if (imgFile !== undefined) {
+
             error.style.display = "none";
+            document.querySelector(".submitting-form").style.display = "none";
 
             // создание элемента img на страницу
             let img = document.createElement('img');
             img.setAttribute("id","image");
+            img.alt = "Изображение";
             
             // запись данных в хранилище localStorage в формате (ключ, значение)
-            if(imgFile) {
-                img.src = URL.createObjectURL(imgFile); // присваивание URL -> src
-                localStorage.setItem("loadedImage", img.src);
-            }
+            img.src = URL.createObjectURL(imgFile); // присваивание URL -> src
+            localStorage.setItem("loadedImage", img.src);
+            //console.log(localStorage);
 
-            // получение данных из localStorage, присваивание значений свойствам элемента img
-            img.src = localStorage.getItem("loadedImage");
-            img.alt = "Изображение";
-
-            let container = document.querySelector('.photo');
-            container.prepend(img);
-
-            document.querySelector(".submitting-form").style.display = "none";
-
-            let image = document.querySelector('.photo img');
-            image.addEventListener("load", function() { getInfo(this) } ); // * обработка события после загрузки изображения
-
+            displayImage(img);
         } else {
             // если изображение не выбрано -> ошибка
             error.style.display = "block";
         }
+    }
+
+    // Функция отображения изображения на странице
+    function displayImage(img) {
+        let container = document.querySelector('.photo');
+        container.prepend(img);
+
+        let image = document.querySelector('.photo img');
+
+        // * обработка события после загрузки изображения
+        image.addEventListener("load", function() { getInfo(this) } ); 
     }
 
     // * ---- Получение информации (выполнение последующего кода) только после того, как загружено изображение
