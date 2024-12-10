@@ -62,36 +62,21 @@ function start() {
         let image = document.querySelector('.photo img');
 
         // * обработка события после загрузки изображения
-        image.addEventListener("load", function() { getInfo(this) } ); 
+        image.addEventListener("load", function() { showInfo(this) } ); 
     }
 
-    // * ---- Получение информации (выполнение последующего кода) только после того, как загружено изображение
-    function getInfo(loadedImg) {
+    // * ---- Получение информации
+    function showInfo(loadedImg) {
         console.log("Показать информацию");
 
-        // * Отобразить кнопку "Загрузить другое изображение"
-        changeImageBtn.style.display = "block";
-        changeImageBtn.addEventListener("click", changeImage);
+        sizeLineMessage.style.display = "none";
+        sizeLine.style.display = "block";
 
         // * ---- Вывести размеры загруженного изображения
-        //console.log(`ширина: ${imageBlock.clientWidth}`);
-        //console.log(`высота: ${imageBlock.clientHeight}`);
-
-        if(loadedImg.complete) {
-            //console.log(loadedImg.complete); // true если изображение загружено
-
-            let wElem = document.querySelector(".width-size");
-            let hElem = document.querySelector(".height-size");
-
-            let w = loadedImg.clientWidth;
-            let h = loadedImg.clientHeight;
-
-            wElem.append(w);
-            hElem.append(h);
+        if (loadedImg.complete) {
+            showImageSizes(loadedImg);   
         }
-        sizeLine.style.display = "block";
-        sizeLineMessage.style.display = "none";
-
+        
         // * ---- Получить и сохранить координаты при клике на изображение
         loadedImg.addEventListener("click", getCoords);
 
@@ -101,8 +86,27 @@ function start() {
         // * ----- Сброс данных при клике на кнопку "Обновить"
         resetBtn.addEventListener("click", reset);
 
+        // * Отобразить кнопку "Загрузить другое изображение"
+        changeImageBtn.style.display = "block";
+        changeImageBtn.addEventListener("click", changeImage);
     }
 
+    // функция отображения размеров изображения
+    function showImageSizes(image) {
+        let wElem = document.querySelector(".width-size");
+        let hElem = document.querySelector(".height-size");
+
+        let w = image.clientWidth;
+        let h = image.clientHeight;
+
+        //console.log(`ширина: ${w}`);
+        //console.log(`высота: ${h}`);
+
+        wElem.append(w);
+        hElem.append(h);
+    }
+
+    // TODO рефактор
     // * функция получения координат: реакция на клик мышки, получение и сохранение координат
     function getCoords(e) {
 
