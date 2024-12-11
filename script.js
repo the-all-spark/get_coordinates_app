@@ -17,7 +17,7 @@ function start() {
     let copyBtn = document.querySelector(".copy-btn"); // кнопка копирования строки
     let changeImageBtn = document.querySelector(".change-image-btn"); // кнопка "Загрузить другое изображение"
 
-    let objCoords = {}; // пустой объект с координатами
+    let objCoords = {}; // пустой объект для координат
     let number = 0; // начальное значение для имени ключа в объекте
 
     // * ---- Загрузка изображения на страницу
@@ -81,7 +81,7 @@ function start() {
         loadedImg.addEventListener("click", getCoords);
 
         // * ----- При клике на кнопку "Завершить" вывести координаты
-        finishBtn.addEventListener("click", function() { prepare(objCoords) });
+        finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
 
         // * ----- Сброс данных при клике на кнопку "Обновить"
         resetBtn.addEventListener("click", reset);
@@ -106,41 +106,43 @@ function start() {
         hElem.append(h);
     }
 
-    // TODO рефактор
-    // * функция получения координат: реакция на клик мышки, получение и сохранение координат
+    // * функция получения координат: реакция на клик мышки на карте => получение и сохранение координат
     function getCoords(e) {
 
         // разблокировка кнопки "Обновить"
-        if(resetBtn.getAttribute("disabled") === "") {
+        if (resetBtn.getAttribute("disabled") === "") {
             resetBtn.removeAttribute("disabled");
         }
 
         // разблокировка кнопки "Завершить"
-        if(finishBtn.getAttribute("disabled") === "") {
+        if (finishBtn.getAttribute("disabled") === "") {
             finishBtn.removeAttribute("disabled");
         }
 
-        // точки кликов отмечаем большими кружками 20 х 20px
-        let diameter = 20;
-        addClickReaction(e,diameter); // реакция на клик мышки (вызов функции)
+        addClickReaction(e); // отображаем реакцию на клик мышки
 
-        let coords = getPosition(e); // получаем координаты одной точки (вызов функции) 
+        let coords = getPosition(e); // получаем координаты одной точки
 
         number++;
-        objCoords = savePoint(number, coords); // сохраняем координаты под порядковым номеров в объекте (вызов функции) 
+        objCoords = savePoint(number, coords); // сохраняем координаты под порядковым номером в объекте
         //console.log(objCoords);   
     }
 
-    // * функция отмечает каждую точку клика полупрозрачным кругом с обводкой
-    function addClickReaction(e,diameter) {
+    // * функция отмечает каждую точку клика полупрозрачным кругом с обводкой 20 х 20px
+    function addClickReaction(e) {
         let circleMark = document.createElement("div");
         circleMark.className = "circle-mark";
 
+        let diameter = 20;
+        circleMark.style.width = diameter + "px";
+        circleMark.style.height = diameter + "px";
+
+        // координаты точки клика
         let x = e.pageX;
         let y = e.pageY;
 
         // через размер кружков рассчитать смещение позиционирования
-        correctCircleOffset(circleMark,diameter,x,y);
+        correctCircleOffset(circleMark, diameter, x, y);
 
         circleMark.style.display = "block";
         document.querySelector(".photo").append(circleMark);
@@ -148,13 +150,7 @@ function start() {
 
     // * функция расчета смещения отображения круга в зависимости от его ширины 
     // принимает элемент круга, его диаметр, координаты X и Y клика
-    function correctCircleOffset(circle,diameter,x,y) {
-            //console.log(diameter);
-            //console.log(x);
-            //console.log(y);
-
-        circle.style.width = diameter + "px";
-        circle.style.height = diameter + "px";
+    function correctCircleOffset(circle, diameter, x, y) {
 
         /* вычисляем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
             top: calc(430px - 10px); 
@@ -168,7 +164,7 @@ function start() {
         circle.style.left = xPos + "px"; // X
     }
 
-    // * функция получения координат
+    // * функция получения координат точки клика
     function getPosition(e) {
         let x = e.pageX;
         let y = e.pageY;
@@ -181,9 +177,9 @@ function start() {
         return objCoords;
     }
 
+    // TODO рефакторинг
     // * функция подготовки к выводу координат (при клике на "Завершить") 
-    function prepare(obj) {
-        //console.log(obj);
+    function prepareToShowCoords(obj) {
         
         // больше не позволит получать координаты до очистки данных (перезагрузки)
         document.querySelector(".photo img").removeEventListener("click", getCoords); 
@@ -201,11 +197,14 @@ function start() {
 
         let newDiam = 5;
 
-        for(let i = 0; i < circlesArr.length; i++) {
+        for (let i = 0; i < circlesArr.length; i++) {
+            circlesArr[i].style.width = newDiam + "px";
+            circlesArr[i].style.height = newDiam + "px";
+
             let x = obj[i+1][0]; 
             let y = obj[i+1][1];
 
-            correctCircleOffset(circlesArr[i],newDiam,x,y); // вызов функции
+            correctCircleOffset(circlesArr[i], newDiam, x, y); // вызов функции
             circlesArr[i].style.backgroundColor = "#ffffff";
         }
         
