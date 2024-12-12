@@ -7,7 +7,7 @@ function start() {
     let sizeLineMessage = document.querySelector(".size-line-message");
     
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
-    let coordStr = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
+    let coordStrBlock = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
 
     let pointsExample = document.querySelector(".points-example"); // пример вывода точек
     let coordStrExample = document.querySelector(".coord-str-example"); // пример вывода строки координат 
@@ -177,19 +177,36 @@ function start() {
         return objCoords;
     }
 
-    // TODO рефакторинг
     // * функция подготовки к выводу координат (при клике на "Завершить") 
+    // принимает объект массивов точек вида [x,y]
     function prepareToShowCoords(obj) {
         
         // больше не позволит получать координаты до очистки данных (перезагрузки)
-        document.querySelector(".photo img").removeEventListener("click", getCoords); 
+        document.querySelector(".photo img").removeEventListener("click", getCoords);
+        
+        if (finishBtn.getAttribute("disabled") === null) {
+            finishBtn.setAttribute("disabled", ""); // делаем кнопку неактивной
+        }
 
         changeCircles(obj); // изменяем кружки на более мелкие (точки)
-        makeString(obj); // записываем координаты через запятую
+
+        // * отображаем блок с координатами
+        showCoordsBlock(obj);
         
+        // * записываем координаты через запятую и отображаем строку
+        let coordString = makeCoordString(obj);
+        showCoordsStr(coordString);
+        
+        //делаем активной кнопку копирования строки с координатами
+        copyBtn.removeAttribute("disabled");
+        copyBtn.addEventListener("click", function() { copyCoordStr(coordString) });
+
+        // выделяем полигон
+        highlightPolygon(coordString);
     }
 
     // * функция изменения размера кружков (принимает массив с координатами точек)
+    // принимает объект массивов точек вида [x,y]
     function changeCircles(obj) {
 
         let circles = document.querySelectorAll(".circle-mark");
@@ -200,91 +217,76 @@ function start() {
         for (let i = 0; i < circlesArr.length; i++) {
             circlesArr[i].style.width = newDiam + "px";
             circlesArr[i].style.height = newDiam + "px";
+            circlesArr[i].style.backgroundColor = "#ffffff";
 
-            let x = obj[i+1][0]; 
+            let x = obj[i+1][0]; // нумерация точек с 1
             let y = obj[i+1][1];
 
             correctCircleOffset(circlesArr[i], newDiam, x, y); // вызов функции
-            circlesArr[i].style.backgroundColor = "#ffffff";
         }
-        
     }
 
     // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
-    function makeString(obj) {
+    // принимает объект массивов точек вида [x,y]
+    function makeCoordString(obj) {
+        let coordStr = "";
+        let objLength = Object.keys(obj).length; // количество свойств в объекте
 
-        if(finishBtn.getAttribute("disabled") === null) {
-            // делаем кнопку неактивной
-            finishBtn.setAttribute("disabled", "");
-        
-            let coordStr = ""; // пустая строка для вывода
-            let objLength = Object.keys(obj).length; // количество свойств в объекте
-
-            // перебор свойств объектов
-            for (let prop in obj) {
-                //console.log(obj[prop]);   // значение
-                //console.log(prop);        // ключ
-
-                if (prop == objLength) {
-                    coordStr += obj[prop].join(","); // если пара ключ=значение последняя, запятая не ставится
-                } else {
-                    coordStr += obj[prop].join(",") + ","; 
-                }
+        for (let number in obj) {
+            if (number == objLength) {
+                coordStr += obj[number].join(","); // если пара ключ=значение последняя, запятая не ставится
+            } else {
+                coordStr += obj[number].join(",") + ","; 
             }
-            showCoords(obj,coordStr);  // вызов функции вывода строки
         }
+        return coordStr;       
     }
 
-    // * функция вывода блока информации с координатами (получает объект с точками и строку координат)
-    function showCoords(object,string) {
+    // * функция вывода блока с координатами
+    // принимает объект массивов точек вида [x,y] и строку с координатами
+    function showCoordsBlock(obj) {
+        pointsExample.style.display = "none"; //скрываем пример
 
         // вывод точек и их координат
         // <span>Точка 1:</span> <span class="coord">x = 228,</span> <span class="coord">y = 788</span>
-        for (let prop in object) {
+        for (let number in obj) {
             
             // заголовок с номером точки
             let pointNumSpan = document.createElement("span");
-            let pointNum = `Точка ${prop}: `;
+            let pointNum = `Точка ${number}: `;
             pointNumSpan.prepend(pointNum);
-                //console.log(pointNumSpan);
 
             //координата X
             let xSpan = document.createElement("span");
             xSpan.className = "coord";
-            let numX = ` x = ${object[prop][0]},`;
+            let numX = ` x = ${obj[number][0]},`;
             xSpan.innerHTML = numX;
-                //console.log(xSpan);
 
             //координата Y
             let ySpan = document.createElement("span");
             ySpan.className = "coord";
-            let numY = ` y = ${object[prop][1]}`;
+            let numY = ` y = ${obj[number][1]}`;
             ySpan.innerHTML = numY;
-                //console.log(ySpan);
-
-            //скрываем примеры, соединяем и выводим точки
-            pointsExample.style.display = "none";
-            coordStrExample.style.display = "none";
 
             pointsBlock.append(pointNumSpan);
             pointsBlock.append(xSpan);
             pointsBlock.append(ySpan);
             pointsBlock.insertAdjacentHTML("beforeend","</br>");
         }
+    }
+
+    // * функция вывода строки с координатами (принимает строку с координатами)
+    function showCoordsStr(string) {
+        //скрываем пример
+        coordStrExample.style.display = "none";
         
         // вывод строки координат
         let N = 60; // лимит символов в строке //! должно зависеть от ширины выведенного на страницу изображения
-        coordStr.innerHTML = divideStr(string,N);
-        coordStr.style.color = "black"; 
-
-        //сделать активной кнопку копирования строки с координатами
-        copyBtn.removeAttribute("disabled");
-        copyBtn.addEventListener("click", function() { copyCoordStr(string) });
-
-        // выделение полигона
-        highlightPolygon(string);
+        coordStrBlock.innerHTML = divideStr(string, N);
+        coordStrBlock.style.color = "black"; 
     }
 
+    // TODO
     // * функция разбивки строки с координатами
     function divideStr(str,N) {
         //console.log(str);
@@ -339,7 +341,7 @@ function start() {
     function reset() {
         // очищаем блок с точками, строку; делаем неактивной кнопку обновить и завершить
         pointsBlock.innerHTML = "";
-        coordStr.innerHTML = "";
+        coordStrBlock.innerHTML = "";
         resetBtn.setAttribute("disabled", "");
         finishBtn.setAttribute("disabled", "");
 
