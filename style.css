@@ -98,7 +98,7 @@ body {
     grid-area: info;
     margin-right: 30px;
     margin-left: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 70px;
 }
 
 /* ----- Размер изображения ------- */
@@ -175,7 +175,7 @@ body {
     display: none;
     width: 140px;
     position: absolute;
-    bottom: -100px;
+    bottom: -80px;
     left: 0;
 }
 
