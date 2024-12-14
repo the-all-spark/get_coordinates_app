@@ -19,6 +19,19 @@ function start() {
 
     let objCoords = {}; // пустой объект для координат
     let number = 0; // начальное значение для имени ключа в объекте
+    let coordString; // строка координат
+
+    // * Вывод координат при клике на кнопку "Завершить" 
+    finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
+
+    // * Сброс данных при клике на кнопку "Обновить"
+    resetBtn.addEventListener("click", reset);
+
+    // * Смена изображения при клике на кнопку "Загрузить другое изображение"
+    changeImageBtn.addEventListener("click", changeImage);
+
+    // * Кнопка копирования строки координат
+    copyBtn.addEventListener("click", function() { copyCoordStr(coordString) });
 
     // * ---- Загрузка изображения на страницу
     let submitBtn = document.querySelector(".submitting-form button");
@@ -26,7 +39,6 @@ function start() {
 
     function submitImage() {
         console.log("Загрузить изображение");
-
         let error = document.querySelector('.submit-error');
 
         let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
@@ -49,7 +61,7 @@ function start() {
 
             displayImage(img);
         } else {
-            // если изображение не выбрано -> ошибка
+            // если изображение не выбрано => ошибка
             error.style.display = "block";
         }
     }
@@ -72,23 +84,16 @@ function start() {
         sizeLineMessage.style.display = "none";
         sizeLine.style.display = "block";
 
-        // * ---- Вывести размеры загруженного изображения
         if (loadedImg.complete) {
-            showImageSizes(loadedImg);   
+            // * вывести размеры загруженного изображения
+            showImageSizes(loadedImg);  
+            
+            // * получить и сохранить координаты при клике на изображение
+            loadedImg.addEventListener("click", getCoords);
+
+            // отобразить кнопку "Загрузить другое изображение"
+            changeImageBtn.style.display = "block";
         }
-        
-        // * ---- Получить и сохранить координаты при клике на изображение
-        loadedImg.addEventListener("click", getCoords);
-
-        // * ----- При клике на кнопку "Завершить" вывести координаты
-        finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
-
-        // * ----- Сброс данных при клике на кнопку "Обновить"
-        resetBtn.addEventListener("click", reset);
-
-        // * Отобразить кнопку "Загрузить другое изображение"
-        changeImageBtn.style.display = "block";
-        changeImageBtn.addEventListener("click", changeImage);
     }
 
     // функция отображения размеров изображения
@@ -154,7 +159,8 @@ function start() {
 
         /* вычисляем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
             top: calc(430px - 10px); 
-            left: calc(323px - 10px); */
+            left: calc(323px - 10px); 
+        */
         let offset = diameter/2;
 
         let yPos = y - offset;
@@ -180,6 +186,7 @@ function start() {
     // * функция подготовки к выводу координат (при клике на "Завершить") 
     // принимает объект массивов точек вида [x,y]
     function prepareToShowCoords(obj) {
+        console.log("Вывести координаты"); 
         
         // больше не позволит получать координаты до очистки данных (перезагрузки)
         document.querySelector(".photo img").removeEventListener("click", getCoords);
@@ -188,20 +195,24 @@ function start() {
             finishBtn.setAttribute("disabled", ""); // делаем кнопку неактивной
         }
 
+        //скрываем примеры
+        pointsExample.style.display = "none"; 
+        coordStrExample.style.display = "none";
+
         changeCircles(obj); // изменяем кружки на более мелкие (точки)
 
         // * отображаем блок с координатами
         showCoordsBlock(obj);
         
         // * записываем координаты через запятую и отображаем строку
-        let coordString = makeCoordString(obj);
+        //let coordString = makeCoordString(obj);
+        coordString = makeCoordString(obj);
         showCoordsStr(coordString);
         
         //делаем активной кнопку копирования строки с координатами
         copyBtn.removeAttribute("disabled");
-        copyBtn.addEventListener("click", function() { copyCoordStr(coordString) });
 
-        // выделяем полигон
+        // выделяем полигон по точкам (координатам)
         highlightPolygon(coordString);
     }
 
@@ -226,17 +237,17 @@ function start() {
         }
     }
 
-    // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
+    // ** функция записи координат через запятую (после нажатия на кнопку "Завершить")
     // принимает объект массивов точек вида [x,y]
-    function makeCoordString(obj) {
+    function makeCoordString(coordinates) {
         let coordStr = "";
-        let objLength = Object.keys(obj).length; // количество свойств в объекте
+        let coordinatesAmount = Object.keys(coordinates).length; // количество свойств в объекте
 
-        for (let number in obj) {
-            if (number == objLength) {
-                coordStr += obj[number].join(","); // если пара ключ=значение последняя, запятая не ставится
+        for (let point in coordinates) {
+            if (point == coordinatesAmount) {
+                coordStr += coordinates[point].join(","); // если пара ключ=значение последняя, запятая не ставится
             } else {
-                coordStr += obj[number].join(",") + ","; 
+                coordStr += coordinates[point].join(",") + ","; 
             }
         }
         return coordStr;       
@@ -245,7 +256,6 @@ function start() {
     // * функция вывода блока с координатами
     // принимает объект массивов точек вида [x,y] и строку с координатами
     function showCoordsBlock(obj) {
-        pointsExample.style.display = "none"; //скрываем пример
 
         // вывод точек и их координат
         // <span>Точка 1:</span> <span class="coord">x = 228,</span> <span class="coord">y = 788</span>
@@ -277,22 +287,17 @@ function start() {
 
     // * функция вывода строки с координатами (принимает строку с координатами)
     function showCoordsStr(string) {
-        //скрываем пример
-        coordStrExample.style.display = "none";
-        
-        // вывод строки координат
-        let N = 60; // лимит символов в строке //! должно зависеть от ширины выведенного на страницу изображения
+        // лимит символов в строке
+        //! должно зависеть от ширины выведенного на страницу изображения или ширины экрана
+        let N = 60;  
         coordStrBlock.innerHTML = divideStr(string, N);
         coordStrBlock.style.color = "black"; 
     }
 
-    // TODO
-    // * функция разбивки строки с координатами
-    function divideStr(str,N) {
-        //console.log(str);
+    // ** функция разбивки строки с координатами
+    function divideStr(str, N) {
 
         let numbersArr = str.trim().split(","); // разрезаем строку на массив чисел через запятую
-        //console.log(numbersArr);
 
         let result = []; // массив для отдельных строк
         let currentNumStr = numbersArr.shift(); // кладём первое число в текущую строку
@@ -304,17 +309,18 @@ function start() {
                 result.push(currentNumStr); // строка обрывается и записывается в массив
                 currentNumStr = number; // начало новой строки
             } else {
-                currentNumStr += ',' + number; //добавляем слово через запятую к текущей строке
+                currentNumStr += ',' + number; //добавляем число через запятую к текущей строке
             }
         }
 
         result.push(currentNumStr); //остатки в текущей строке отправляются на выход
-        //console.log(result);
         return result.join(',\n'); // вывод массива строк (в конце строки запятая и перенос на новую строку)
     }
 
     // * функция копирования строки с координатами (в виде одной строки)
     function copyCoordStr(str) {
+        console.log("Скопирована строка координат!");
+
         copyBtn.classList.add("active"); //выделяет кнопку зеленым
         document.querySelector(".copied-message").style.display = "block"; 
         
@@ -323,25 +329,24 @@ function start() {
 
     // * функция выделения цветом и рамкой полигона по координатам
     function highlightPolygon(str) {
-            //console.log(str);
-
         let svgBlock = document.querySelector(".photo svg");
     
         let polygonElem = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         polygonElem.setAttribute("points", str);
-            //console.log(polygonElem);
 
         svgBlock.append(polygonElem);
-            //console.log(svgBlock);
-
         svgBlock.style.display = "block";  
     }
 
     // * функция сброса данных
     function reset() {
-        // очищаем блок с точками, строку; делаем неактивной кнопку обновить и завершить
+        console.log("Обновить информацию");
+
+        // очищаем блок с точками, строку координат
         pointsBlock.innerHTML = "";
         coordStrBlock.innerHTML = "";
+
+        // делаем неактивной кнопку обновить и завершить
         resetBtn.setAttribute("disabled", "");
         finishBtn.setAttribute("disabled", "");
 
@@ -350,43 +355,56 @@ function start() {
         copyBtn.classList.remove("active"); //удаляет выделение кнопки зеленым
         document.querySelector(".copied-message").style.display = "none"; 
 
-        // удаляем выделенный полигон, скрываем svg, если объект отмечен. Иначе - удаляем точки выделения
-        let poly = document.querySelector(".photo svg polygon");
-        if(poly) {
-            poly.remove();
-            document.querySelector(".photo svg").style.display = "none";
-            removeCircles();
-        } else {
-            removeCircles();
-        }
-        
         // очищаем объект с координатами точек
-        objCoords = {};
+        if (!isEmpty(objCoords)) {
+            objCoords = {};
+        }
         number = 0;
+
+        deletePolygons();
+        removeCircles();
         
         // возвращаем примеры
         pointsExample.style.display = "block";
         coordStrExample.style.display = "block";
 
         document.querySelector(".photo img").addEventListener("click", getCoords); // возвращаем обработчик события
+    }
 
-        // очищаем сообщение и реакцию иконки на копирование 
-        document.querySelector(".copied-message").style.display = "none"; 
-        
-        // * функция удаления кружков выделения точек
-        function removeCircles() {
-            let circles = document.querySelectorAll(".circle-mark");
-            let circlesArr = Array.from(circles);
+    // * функция проверки объекта на пустоту
+    function isEmpty(obj) {
+        for (let key in obj) {
+            return false;
+        }
+        return true;
+    }
 
-            for(let i = 0; i < circlesArr.length; i++) {
-                circlesArr[i].remove();
-            }
+    // * функция удаления выделенного полигона, скрытие svg
+    function deletePolygons() {
+        let polygons = document.querySelectorAll(".photo svg polygon");
+
+        if (Array.from(polygons).length > 0) {
+            polygons.forEach( (poly) =>  poly.remove() );
+        }
+
+        document.querySelector(".photo svg").style.display = "none";
+    }
+
+    // * функция удаления кружков выделения точек
+    function removeCircles() {
+        let circles = document.querySelectorAll(".circle-mark");
+        let circlesArr = Array.from(circles);
+
+        for (let i = 0; i < circlesArr.length; i++) {
+            circlesArr[i].remove();
         }
     }
 
     // * функция загрузки другого изображения (сброс данных, вывод формы загрузки файла)
     function changeImage() {
-        console.log("Замена изображения");
+        console.log("Заменить изображение");
+
+        window.localStorage.clear();
         reset(); // сброс данных
 
         changeImageBtn.style.display = "none";
