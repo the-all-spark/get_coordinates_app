@@ -37,13 +37,14 @@ function start() {
     let submitBtn = document.querySelector(".submitting-form button");
     submitBtn.addEventListener("click", submitImage);
 
+    // * функция загрузки изображения на страницу
     function submitImage() {
         console.log("Загрузить изображение");
         let error = document.querySelector('.submit-error');
 
         let imgFile = file.files[0]; // объект File ( <input type="file" id="file"/> )
         
-        // если изображение выбрано =>
+        // если изображение выбрано через форму =>
         if (imgFile !== undefined) {
 
             error.style.display = "none";
@@ -61,7 +62,7 @@ function start() {
 
             displayImage(img);
         } else {
-            // если изображение не выбрано => ошибка
+            // если изображение не выбрано через форму => ошибка
             error.style.display = "block";
         }
     }
@@ -147,15 +148,26 @@ function start() {
         let y = e.pageY;
 
         // через размер кружков рассчитать смещение позиционирования
-        correctCircleOffset(circleMark, diameter, x, y);
+        let parametersToCorrect = getObjectFromParams(circleMark, diameter, x, y); 
+        correctCircleOffset(parametersToCorrect);
 
         circleMark.style.display = "block";
         document.querySelector(".photo").append(circleMark);
     }
 
+    // функция построения объекта из параметров 
+    function getObjectFromParams(circle, diameter, x, y) {
+        return {
+            circle, 
+            diameter, 
+            x, 
+            y
+        }
+    }
+
     // * функция расчета смещения отображения круга в зависимости от его ширины 
-    // принимает элемент круга, его диаметр, координаты X и Y клика
-    function correctCircleOffset(circle, diameter, x, y) {
+    // принимает объект, включающий элемент круга, его диаметр, координаты X и Y клика (деструктурирует его)
+    function correctCircleOffset( {circle, diameter, x, y} ) {
 
         /* вычисляем значения смещения круга с учетом его размеров (например, для круга 20 x 20 px)
             top: calc(430px - 10px); 
@@ -233,11 +245,12 @@ function start() {
             let x = obj[i+1][0]; // нумерация точек с 1
             let y = obj[i+1][1];
 
-            correctCircleOffset(circlesArr[i], newDiam, x, y); // вызов функции
+            let parametersToCorrect = getObjectFromParams(circlesArr[i], newDiam, x, y); 
+            correctCircleOffset(parametersToCorrect);
         }
     }
 
-    // ** функция записи координат через запятую (после нажатия на кнопку "Завершить")
+    // * функция записи координат через запятую (после нажатия на кнопку "Завершить")
     // принимает объект массивов точек вида [x,y]
     function makeCoordString(coordinates) {
         let coordStr = "";
@@ -294,7 +307,7 @@ function start() {
         coordStrBlock.style.color = "black"; 
     }
 
-    // ** функция разбивки строки с координатами
+    // * функция разбивки строки с координатами
     function divideStr(str, N) {
 
         let numbersArr = str.trim().split(","); // разрезаем строку на массив чисел через запятую
@@ -395,9 +408,7 @@ function start() {
         let circles = document.querySelectorAll(".circle-mark");
         let circlesArr = Array.from(circles);
 
-        for (let i = 0; i < circlesArr.length; i++) {
-            circlesArr[i].remove();
-        }
+        circlesArr.forEach( (circle) => circle.remove() );
     }
 
     // * функция загрузки другого изображения (сброс данных, вывод формы загрузки файла)
@@ -416,6 +427,7 @@ function start() {
 
         document.querySelector(".photo img").remove();
         document.querySelector(".submitting-form").style.display = "block";
+        document.querySelector("#file").value = '';
     }
 
 
