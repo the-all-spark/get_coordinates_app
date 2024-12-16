@@ -300,11 +300,26 @@ function start() {
 
     // * функция вывода строки с координатами (принимает строку с координатами)
     function showCoordsStr(string) {
-        // лимит символов в строке
-        //! должно зависеть от ширины выведенного на страницу изображения или ширины экрана
-        let N = 60;  
+        let N = getSymbolLimit(); // лимит символов в строке (в зависимости от ширины экрана)
+
         coordStrBlock.innerHTML = divideStr(string, N);
         coordStrBlock.style.color = "black"; 
+    }
+
+    // * функция определения лимита символов для строки с координатами
+    function getSymbolLimit(){
+        let symbolAmount;
+
+        if (window.innerWidth < 1480) {
+            symbolAmount = 30;
+        }
+        if (window.innerWidth >= 1480 && window.innerWidth <= 1550) {
+            symbolAmount = 60;
+        }
+        if (window.innerWidth > 1550) {
+            symbolAmount = 80;
+        }
+        return symbolAmount;
     }
 
     // * функция разбивки строки с координатами
