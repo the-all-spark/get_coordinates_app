@@ -21,6 +21,14 @@ function start() {
     let number = 0; // начальное значение для имени ключа в объекте
     let coordString; // строка координат
 
+    // * Выделение поля ввода ширины одним кликом
+    let form =  document.querySelector(".submitting-form");
+    let imageInput = form.querySelector('[name="widthSize"]');
+
+    imageInput.addEventListener("click", function(e) { 
+        setTimeout(() => { e.target.select(); }, 1);
+    });
+
     // * Вывод координат при клике на кнопку "Завершить" 
     finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
 
@@ -74,7 +82,9 @@ function start() {
 
         // * получение ширины изображения (пользовательского значения)
         let form =  document.querySelector(".submitting-form");
-        let imgWidth = form.querySelector('[name="widthSize"]').value; // введенное значение (или 1000 по умолч.)
+
+        let imageInput = form.querySelector('[name="widthSize"]');
+        let imgWidth = imageInput.value; // введенное значение (или 1000 по умолч.)
 
         let image = document.querySelector('.photo img');
         image.style.width = `${imgWidth}px`;
