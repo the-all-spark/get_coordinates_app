@@ -72,8 +72,13 @@ function start() {
         let container = document.querySelector('.photo');
         container.prepend(img);
 
-        let image = document.querySelector('.photo img');
+        // * получение ширины изображения (пользовательского значения)
+        let form =  document.querySelector(".submitting-form");
+        let imgWidth = form.querySelector('[name="widthSize"]').value; // введенное значение (или 1000 по умолч.)
 
+        let image = document.querySelector('.photo img');
+        image.style.width = `${imgWidth}px`;
+        
         // * обработка события после загрузки изображения
         image.addEventListener("load", function() { showInfo(this) } ); 
     }
@@ -81,11 +86,15 @@ function start() {
     // * ---- Получение информации
     function showInfo(loadedImg) {
         console.log("Показать информацию");
+        //console.log(loadedImg);
 
         sizeLineMessage.style.display = "none";
         sizeLine.style.display = "block";
 
         if (loadedImg.complete) {
+            // * изменить размеры изображения
+
+
             // * вывести размеры загруженного изображения
             showImageSizes(loadedImg);  
             
