@@ -118,6 +118,46 @@ body {
     border: 1px solid black;
 }
 
+/* ----- Блок стилизации ------- */
+
+.styleBlock {
+    display: grid;
+    grid-template-areas: 
+        "box-sizing-block border-block"
+        "box-sizing-block apply-btn";
+}
+
+.boxSizingBlock {
+    grid-area: box-sizing-block;
+}
+
+.borderBlock {
+    grid-area: border-block;
+    border-left: 1px solid rgb(143, 143, 143);
+    padding-left: 10px;
+}
+
+.styleBlock input[type="submit"] {
+    grid-area: apply-btn;
+    margin-top: 15px;
+    width: 40%;
+    margin-left: auto;
+}
+
+.styleBlock p {
+    margin-top: 0;
+    margin-bottom: 7px;
+}
+
+.borderBlock input {
+    margin-right: 5px;
+}
+
+.codeStr,
+.styleBlock input:not([type="submit"]) {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 /* ----- Вывод координат, кнопки "Завершить", "Обновить", "Загрузить другое изображение" ------- */
 
 .coordinate-block {

@@ -16,7 +16,7 @@
             <!-- <img src="./assets/outside_general_1000.jpg" alt="Изображение"> -->
 
             <!-- * Форма загрузки изображения -->
-            <div class="submitting-form">
+            <div class="submitting-form form">
                 <p><b>Выберите изображение:</b></p>
                 <input type="file" id="file" /> <br><br>
                 <p>Укажите желаемую ширину изображения (в px):</p>
@@ -48,7 +48,31 @@
                 </div>
             </div>
 
-            <div class="block"><b>Как пользоваться?</b>
+            <p><b>Стили изображения</b>:</p>
+            <div class="styleBlock form">
+                <div class="boxSizingBlock">
+                    <p>Выберите значение свойства <span class="codeStr">box-sizing</span>:</p> 
+
+                    <input type="radio" name="boxSizing" id="content-box" checked> 
+                    <label for="content-box"><span class="codeStr">content-box</span></label><br>
+
+                    <input type="radio" name="boxSizing" id="border-box"> 
+                    <label for="border-box"><span class="codeStr">border-box</span></label>
+                </div>
+
+                <div class="borderBlock">
+                    <p>Выберите ширину и цвет границы (свойства <span class="codeStr">border</span>):</p>
+                    <span class="codeStr">border:</span> 
+                    <input type="text" name="borderSize" value="0" size="3" maxlength="3">
+                    <span class="codeStr">px solid </span>
+                    <input type="text" name="borderColor" value="black" size="10" maxlength="10">;<br>
+                </div>
+
+                <input type="submit" value="Применить стили">
+            </div>
+
+            <div class="block">
+                <p><b>Как пользоваться?</b></p>
                 <ul>
                     <li style="color:red;"><b>загрузите изображение</b> через форму слева;</li>
                     <li>для получения координат x,y объекта кликните курсором мышки на нужную точку
