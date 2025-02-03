@@ -22,13 +22,16 @@ function start() {
     let coordString; // строка координат
 
     // * Выделение поля ввода ширины одним кликом
-    let form =  document.querySelector(".submitting-form");
-    let imageInput = form.querySelector('[name="widthSize"]');
+    let forms = document.querySelectorAll(".form");
 
-    imageInput.addEventListener("click", function(e) { 
-        setTimeout(() => { e.target.select(); }, 1);
-    });
-
+    for (let i = 0; i < forms.length; i++) {
+        let inputFields = forms[i].querySelectorAll('input[type="text"]');
+        
+        inputFields.forEach((input) => input.addEventListener("click", function(e) { 
+            setTimeout(() => { e.target.select(); }, 1);
+        }));
+    }
+    
     // * Вывод координат при клике на кнопку "Завершить" 
     finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
 
