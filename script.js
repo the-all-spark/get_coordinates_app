@@ -3,6 +3,8 @@ window.addEventListener("load", start);
 function start() {
     window.localStorage.clear(); // очищаем хранилище
 
+    let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
+
     let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
     let sizeLineMessage = document.querySelector(".size-line-message");
     
@@ -78,7 +80,7 @@ function start() {
         }
     }
 
-    // Функция отображения изображения на странице
+    // * Функция отображения изображения на странице
     function displayImage(img) {
         let container = document.querySelector('.photo');
         container.prepend(img);
@@ -93,7 +95,44 @@ function start() {
         image.style.width = `${imgWidth}px`;
         
         // * обработка события после загрузки изображения
-        image.addEventListener("load", function() { showInfo(this) } ); 
+        image.addEventListener("load", function() { 
+            applyStylesBtn.removeAttribute("disabled");
+            showInfo(this);
+        }); 
+    }
+
+    // * Функция применения стилей к изображению 
+    applyStylesBtn.addEventListener("click", applyStyles);
+
+    function applyStyles() {
+        console.log("Применить стили к изображению");
+
+        let styleForm = document.querySelector('.styleBlock');
+
+        // * Радио-кнопка
+        let boxSizingAll = styleForm.querySelectorAll('[name="boxSizing"]'); // введенное значение (или content-box по умолч.)
+        let selectedBoxSizing = getSelectedRadio(boxSizingAll); // определить какой символ выбран
+        //console.log(selectedBoxSizing); 
+
+        // функция получения выбранного символа
+        function getSelectedRadio(radioArr) {
+            for (let i = 0; i < radioArr.length; i++) {
+                if (!radioArr[i].checked) continue;
+                return radioArr[i].value;
+            }
+        }
+
+        // * Ширина и цвет рамки
+        let borderSize = styleForm.querySelector('[name="borderSize"]').value;
+        let borderColor = styleForm.querySelector('[name="borderColor"]').value;
+        //console.log(borderSize);
+        //console.log(borderColor);
+
+        // * Применение стилей
+        let image = document.querySelector('.photo img');
+        
+        image.style.boxSizing = `${selectedBoxSizing}`;
+        image.style.border = `${borderSize}px solid ${borderColor}`;
     }
 
     // * ---- Получение информации

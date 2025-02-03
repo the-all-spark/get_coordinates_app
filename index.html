@@ -20,7 +20,7 @@
                 <p><b>Выберите изображение:</b></p>
                 <input type="file" id="file" /> <br><br>
                 <p>Укажите желаемую ширину изображения (в px):</p>
-                <input type="text" id="widthSize" name="widthSize" autocomplete="off" value="1000"><br>
+                <input type="text" id="widthSize" name="widthSize" autocomplete="off" value="400"><br> <!-- ! 1000-->
                 <button class="btn">Загрузить</button>
                 <p class="submit-error">Вы не выбрали ни одного файла!</p>
             </div>
@@ -53,10 +53,10 @@
                 <div class="boxSizingBlock">
                     <p>Выберите значение свойства <span class="codeStr">box-sizing</span>:</p> 
 
-                    <input type="radio" name="boxSizing" id="content-box" checked> 
+                    <input type="radio" name="boxSizing" id="content-box" value="content-box" checked> 
                     <label for="content-box"><span class="codeStr">content-box</span></label><br>
 
-                    <input type="radio" name="boxSizing" id="border-box"> 
+                    <input type="radio" name="boxSizing" id="border-box" value="border-box"> 
                     <label for="border-box"><span class="codeStr">border-box</span></label>
                 </div>
 
@@ -68,7 +68,7 @@
                     <input type="text" name="borderColor" value="black" size="10" maxlength="10">;<br>
                 </div>
 
-                <input type="submit" value="Применить стили">
+                <input type="submit" value="Применить стили" class="btn" disabled>
             </div>
 
             <div class="block">
