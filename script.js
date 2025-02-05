@@ -3,7 +3,9 @@ window.addEventListener("load", start);
 function start() {
     window.localStorage.clear(); // очищаем хранилище
 
+    let styleInputsAll = document.querySelectorAll(".styleBlock input"); // все поля формы стилизации
     let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
+    let appliedMessage = document.querySelector(".submit-btn span"); // сообщение о применении стилей
 
     let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
     let sizeLineMessage = document.querySelector(".size-line-message");
@@ -134,14 +136,12 @@ function start() {
         image.style.boxSizing = `${selectedBoxSizing}`;
         image.style.border = `${borderSize}px solid ${borderColor}`;
 
-        document.querySelector(".submit-btn span").style.opacity = 1;
+        appliedMessage.style.opacity = 1;
     }
 
     // * Убрать сообщение при фокусе на поле формы стилизации
-    let inputAll = document.querySelectorAll(".styleBlock input");
-
-    inputAll.forEach((input) => input.addEventListener("focus", function() {
-        document.querySelector(".submit-btn span").style.opacity = "";
+    styleInputsAll.forEach((input) => input.addEventListener("focus", function() {
+        appliedMessage.style.opacity = "";
     }));
 
     // * ---- Получение информации
@@ -513,8 +513,29 @@ function start() {
         document.querySelector(".photo img").remove();
         document.querySelector(".submitting-form").style.display = "block";
         document.querySelector("#file").value = '';
+
+        resetStyleForm();
     }
 
+    // * функция обновления формы стилизации при смене изображения
+    function resetStyleForm() {
+        appliedMessage.style.opacity = "";
+        applyStylesBtn.setAttribute("disabled", "");
+
+        let styleForm = document.querySelector('.styleBlock');
+
+        // reset границы
+        let borderSizeField = styleForm.querySelector('[name="borderSize"]'); 
+        borderSizeField.value = 0;
+        let borderColorField = styleForm.querySelector('[name="borderColor"]');
+        borderColorField.value = "black";
+
+        // reset радио-кнопок
+        if (styleForm.querySelector("#border-box").checked) {
+            styleForm.querySelector("#border-box").checked = false;
+            styleForm.querySelector("#content-box").checked = true;
+        }
+    }
 
     // TODO дать возможность корректировать каждую цифру => меняется область выделения
 
