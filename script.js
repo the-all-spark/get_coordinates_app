@@ -133,6 +133,8 @@ function start() {
         
         image.style.boxSizing = `${selectedBoxSizing}`;
         image.style.border = `${borderSize}px solid ${borderColor}`;
+
+        document.querySelector(".submit-btn span").style.opacity = 1;
     }
 
     // * ---- Получение информации

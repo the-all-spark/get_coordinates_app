@@ -137,11 +137,13 @@ body {
     padding-left: 10px;
 }
 
-.styleBlock input[type="submit"] {
+.submit-btn {
     grid-area: apply-btn;
+    width: 70%;
     margin-top: 15px;
-    width: 40%;
     margin-left: auto;
+    display: flex;
+    column-gap: 10px;
 }
 
 .styleBlock p {
@@ -156,6 +158,11 @@ body {
 .codeStr,
 .styleBlock input:not([type="submit"]) {
     font-family: 'Courier New', Courier, monospace;
+}
+
+.submit-btn span {
+    color: rgb(0, 155, 93);
+    opacity: 0;
 }
 
 /* ----- Вывод координат, кнопки "Завершить", "Обновить", "Загрузить другое изображение" ------- */
