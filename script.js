@@ -137,6 +137,13 @@ function start() {
         document.querySelector(".submit-btn span").style.opacity = 1;
     }
 
+    // * Убрать сообщение при фокусе на поле формы стилизации
+    let inputAll = document.querySelectorAll(".styleBlock input");
+
+    inputAll.forEach((input) => input.addEventListener("focus", function() {
+        document.querySelector(".submit-btn span").style.opacity = "";
+    }));
+
     // * ---- Получение информации
     function showInfo(loadedImg) {
         console.log("Показать информацию");
