@@ -16,6 +16,11 @@ body {
     margin-bottom: 30px;
 }
 
+h3 {
+    margin-top: 0px;
+    font-size: 16px;
+}
+
 /* -- Форма загрузки изображения -- */
 
 .submitting-form {
@@ -101,7 +106,36 @@ body {
     margin-bottom: 70px;
 }
 
-/* ----- Размер изображения ------- */
+/* ----- Блок "Размер изображения" ------- */
+
+.sizeBlock {
+    display: grid;
+    grid-template-areas: "default-sizes styled-sizes";
+}
+
+.default-sizes {
+    grid-area: default-sizes;
+    padding-right: 10px;
+}
+
+.styled-sizes {
+    grid-area: styled-sizes;
+    border-left: 1px solid rgb(143, 143, 143);
+    padding-left: 10px;
+}
+
+.sizeBlock p {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.size-string {
+    padding: 3px 10px;
+    margin: 0 10px;
+    border: 1px solid black;
+}
+
+/* ----- Размеры изображения при загрузке ------- */
 
 .size-line {
     position: relative;
@@ -112,10 +146,15 @@ body {
     color: rgb(151, 151, 151);
 }
 
-.size-string {
-    padding: 3px 10px;
-    margin: 0 10px;
-    border: 1px solid black;
+/* ----- Размеры изображения (после стилизации) ------- */
+
+.st-size-line {
+    position: relative;
+}
+
+.computed-styles {
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 10px;
 }
 
 /* ----- Блок стилизации ------- */

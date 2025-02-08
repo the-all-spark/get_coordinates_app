@@ -140,7 +140,6 @@ function start() {
         appliedMessage.style.opacity = 1;
 
         // console.log(getComputedStyle(image).borderBottomWidth); //!
-
     }
 
     // * Убрать сообщение при фокусе на поле формы стилизации
@@ -170,8 +169,8 @@ function start() {
 
     // функция отображения размеров изображения
     function showImageSizes(image) {
-        let wElem = document.querySelector(".width-size");
-        let hElem = document.querySelector(".height-size");
+        let wElem = document.querySelector(".d-width-size");
+        let hElem = document.querySelector(".d-height-size");
 
         //let w = image.clientWidth;
         //let h = image.clientHeight;
@@ -520,8 +519,8 @@ function start() {
 
         changeImageBtn.style.display = "none";
 
-        document.querySelector(".width-size").innerHTML = "";
-        document.querySelector(".height-size").innerHTML = "";
+        document.querySelector(".d-width-size").innerHTML = "";
+        document.querySelector(".d-height-size").innerHTML = "";
         sizeLine.style.display = "none";
         sizeLineMessage.style.display = "block";
 

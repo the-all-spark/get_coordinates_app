@@ -35,20 +35,36 @@
         <div class="info-block">
             <h2>Получение координат объекта на изображении</h2>
 
-            <div class="block">
-                <p><b>Размер изображения</b> (ширина, высота):</p>
-                <div class="size-line-message">
-                    (после загрузки изображения здесь появятся его размеры в px)
+            <div class="sizeBlock">
+                <div class="default-sizes block">
+                    <p><b>Размер изображения</b> (ширина, высота):</p>
+                    <div class="size-line-message">
+                        (после загрузки изображения здесь появятся его размеры в px)
+                    </div>
+                    <div class="size-line">
+                        <span class="size-string d-width-size"></span>
+                        x
+                        <span class="size-string d-height-size"></span>
+                        px
+                    </div>
                 </div>
-                <div class="size-line">
-                    <span class="size-string width-size"></span>
-                    x
-                    <span class="size-string height-size"></span>
-                    px
+
+                <div class="styled-sizes block">
+                    <p><b>Размер изображения после применения стилей</b> (ширина, высота):</p>
+                    <div class="computed-styles">
+                        box-sizing: content-box; <br>
+                        border: 2px solid black;
+                    </div>
+                    <div class="st-size-line">
+                        <span class="size-string st-width-size"></span>
+                        x
+                        <span class="size-string dt-height-size"></span>
+                        px
+                    </div>
                 </div>
             </div>
 
-            <p><b>Стили изображения</b>:</p>
+            <h3><b>Стили изображения</b>:</h3>
             <div class="styleBlock form">
                 <div class="boxSizingBlock">
                     <p>Выберите значение свойства <span class="codeStr">box-sizing</span>:</p> 
