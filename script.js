@@ -95,6 +95,7 @@ function start() {
 
         let image = document.querySelector('.photo img');
         image.style.width = `${imgWidth}px`;
+        image.style.height = "auto";
         
         // * обработка события после загрузки изображения
         image.addEventListener("load", function() { 
@@ -137,6 +138,9 @@ function start() {
         image.style.border = `${borderSize}px solid ${borderColor}`;
 
         appliedMessage.style.opacity = 1;
+
+        // console.log(getComputedStyle(image).borderBottomWidth); //!
+
     }
 
     // * Убрать сообщение при фокусе на поле формы стилизации
@@ -153,9 +157,6 @@ function start() {
         sizeLine.style.display = "block";
 
         if (loadedImg.complete) {
-            // * изменить размеры изображения
-
-
             // * вывести размеры загруженного изображения
             showImageSizes(loadedImg);  
             
@@ -172,8 +173,10 @@ function start() {
         let wElem = document.querySelector(".width-size");
         let hElem = document.querySelector(".height-size");
 
-        let w = image.clientWidth;
-        let h = image.clientHeight;
+        //let w = image.clientWidth;
+        //let h = image.clientHeight;
+        let w = getSize(getComputedStyle(image).width);
+        let h = getSize(getComputedStyle(image).height);
 
         //console.log(`ширина: ${w}`);
         //console.log(`высота: ${h}`);
@@ -181,6 +184,18 @@ function start() {
         wElem.append(w);
         hElem.append(h);
     }
+
+    // функция получения числа без px
+    function getSize(imageSize) {
+        let num = imageSize.slice(0,-2);
+        return num;
+    }
+
+    // ! Подкорректировать размер svg исходя из размера изображения
+    // let svgBlock = document.querySelector(".photo svg");
+
+
+    
 
     // * функция получения координат: реакция на клик мышки на карте => получение и сохранение координат
     function getCoords(e) {
