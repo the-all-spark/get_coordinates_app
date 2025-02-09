@@ -5,7 +5,9 @@ function start() {
 
     let styleInputsAll = document.querySelectorAll(".styleBlock input"); // все поля формы стилизации
     let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
-    let appliedMessage = document.querySelector(".submit-btn span"); // сообщение о применении стилей
+    //let appliedMessage = document.querySelector(".submit-btn span"); // сообщение о применении стилей
+    let appliedMessage = document.querySelector(".submit-btn .done-message"); // сообщение о применении стилей
+    let warningMessage = document.querySelector(".submit-btn .warning-message"); // сообщение-предупреждения
 
     let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
     let sizeLineMessage = document.querySelector(".size-line-message");
@@ -100,6 +102,7 @@ function start() {
         // * обработка события после загрузки изображения
         image.addEventListener("load", function() { 
             applyStylesBtn.removeAttribute("disabled");
+            warningMessage.style.display = "none";
             showInfo(this);
         }); 
     }
@@ -137,15 +140,65 @@ function start() {
         image.style.boxSizing = `${selectedBoxSizing}`;
         image.style.border = `${borderSize}px solid ${borderColor}`;
 
-        appliedMessage.style.opacity = 1;
+        //appliedMessage.style.opacity = 1;
+        appliedMessage.style.display = "block";
 
-        // console.log(getComputedStyle(image).borderBottomWidth); //!
+        showStyledImageSizes();
     }
 
     // * Убрать сообщение при фокусе на поле формы стилизации
     styleInputsAll.forEach((input) => input.addEventListener("focus", function() {
-        appliedMessage.style.opacity = "";
+        //appliedMessage.style.opacity = "";
+        appliedMessage.style.display = "";
     }));
+
+    // * функция отображения размеров изображения после применения стилей
+    function showStyledImageSizes() {
+        let image = document.querySelector('.photo img');
+        //console.log(image);
+        
+        let boxSizing = getComputedStyle(image).boxSizing;
+        let borderWidth = +getSize(getComputedStyle(image).borderBottomWidth);
+        let imageWidth = +getSize(getComputedStyle(image).width);
+        let imageHeight = +getSize(getComputedStyle(image).height);
+
+        //console.log(boxSizing);
+        //console.log(borderWidth);
+        //console.log(imageWidth);
+        //console.log(imageHeight);
+
+        let resultImageWidth;
+        let resultImageHeight;
+
+        if (boxSizing == "content-box") {
+            resultImageWidth = imageWidth + borderWidth * 2;
+            resultImageHeight = imageHeight + borderWidth * 2;
+            //console.log(resultImageWidth);
+            //console.log(resultImageHeight);
+        } 
+        
+        if (boxSizing == "border-box") {
+            resultImageWidth = imageWidth - borderWidth * 2;
+            resultImageHeight = imageHeight - borderWidth * 2;
+            //console.log(resultImageWidth);
+            //console.log(resultImageHeight);
+        }
+
+        document.querySelector(".styles-line-message").style.display = "none";
+        document.querySelector(".st-size-line").style.display = "block";
+
+        // Вставить размеры в блок
+        let wElem = document.querySelector(".st-width-size");
+        let hElem = document.querySelector(".st-height-size");
+
+        wElem.append(resultImageWidth.toFixed(1));
+        hElem.append(resultImageHeight.toFixed(1));
+
+        // Вставить стили в блок
+        let computedStylesBlock = document.querySelector(".computed-styles");
+        computedStylesBlock.innerHTML = `box-sizing: ${image.style.boxSizing}; <br>
+        border: ${image.style.border};`
+    }
 
     // * ---- Получение информации
     function showInfo(loadedImg) {
@@ -533,8 +586,10 @@ function start() {
 
     // * функция обновления формы стилизации при смене изображения
     function resetStyleForm() {
-        appliedMessage.style.opacity = "";
+        //appliedMessage.style.opacity = "";
+        appliedMessage.style.display = "";
         applyStylesBtn.setAttribute("disabled", "");
+        warningMessage.style.display = "";
 
         let styleForm = document.querySelector('.styleBlock');
 
