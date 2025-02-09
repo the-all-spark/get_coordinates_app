@@ -51,14 +51,14 @@
 
                 <div class="styled-sizes block">
                     <p><b>Размер изображения после применения стилей</b> (ширина, высота):</p>
-                    <div class="computed-styles">
-                        box-sizing: content-box; <br>
-                        border: 2px solid black;
+                    <div class="styles-line-message">
+                        (после применения стилей здесь появятся размеры изображения в px)
                     </div>
+                    <div class="computed-styles"> <!-- примененные стили --> </div>
                     <div class="st-size-line">
                         <span class="size-string st-width-size"></span>
                         x
-                        <span class="size-string dt-height-size"></span>
+                        <span class="size-string st-height-size"></span>
                         px
                     </div>
                 </div>
@@ -85,7 +85,10 @@
                 </div>
 
                 <div class="submit-btn">
-                    <span>Стили применены!</span>
+                    <div class="message-block">
+                        <span class="warning-message">Сначала загрузите изображение</span>
+                        <span class="done-message">Стили применены!</span>
+                    </div>
                     <input type="submit" value="Применить стили" class="btn" disabled>
                 </div>
             </div>

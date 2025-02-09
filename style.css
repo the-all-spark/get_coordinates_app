@@ -150,11 +150,16 @@ h3 {
 
 .st-size-line {
     position: relative;
+    display: none;
 }
 
 .computed-styles {
     font-family: 'Courier New', Courier, monospace;
     margin-bottom: 10px;
+}
+
+.styles-line-message {
+    color: rgb(151, 151, 151);
 }
 
 /* ----- Блок стилизации ------- */
@@ -178,11 +183,16 @@ h3 {
 
 .submit-btn {
     grid-area: apply-btn;
-    width: 70%;
+    /*width: 70%;*/
+    width: 90%;
     margin-top: 15px;
     margin-left: auto;
     display: flex;
     column-gap: 10px;
+}
+
+.submit-btn input[type="submit"] {
+    margin-left: auto;
 }
 
 .styleBlock p {
@@ -199,9 +209,20 @@ h3 {
     font-family: 'Courier New', Courier, monospace;
 }
 
-.submit-btn span {
+.message-block {
+    text-align: right;
+}
+
+.submit-btn .done-message {
     color: rgb(0, 155, 93);
-    opacity: 0;
+    /*opacity: 0;*/
+    display: none;
+}
+
+.submit-btn .warning-message {
+    color: red;
+    /*opacity: 1;*/
+    display: block;
 }
 
 /* ----- Вывод координат, кнопки "Завершить", "Обновить", "Загрузить другое изображение" ------- */
