@@ -191,8 +191,11 @@ function start() {
         let wElem = document.querySelector(".st-width-size");
         let hElem = document.querySelector(".st-height-size");
 
-        wElem.append(resultImageWidth.toFixed(1));
-        hElem.append(resultImageHeight.toFixed(1));
+        //wElem.append(resultImageWidth.toFixed(1));
+        //hElem.append(resultImageHeight.toFixed(1));
+
+        wElem.innerHTML = resultImageWidth.toFixed(1);
+        hElem.innerHTML = resultImageHeight.toFixed(1);
 
         // Вставить стили в блок
         let computedStylesBlock = document.querySelector(".computed-styles");
