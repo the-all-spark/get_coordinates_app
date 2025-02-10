@@ -8,9 +8,6 @@ function start() {
     //let appliedMessage = document.querySelector(".submit-btn span"); // сообщение о применении стилей
     let appliedMessage = document.querySelector(".submit-btn .done-message"); // сообщение о применении стилей
     let warningMessage = document.querySelector(".submit-btn .warning-message"); // сообщение-предупреждения
-
-    let sizeLine = document.querySelector(".size-line"); // строка с размерами изображения
-    let sizeLineMessage = document.querySelector(".size-line-message");
     
     let pointsBlock = document.querySelector(".points"); // контейнер для вывода координат точек
     let coordStrBlock = document.querySelector(".coord-str"); // контейнер для вывода строки с координатами
@@ -193,7 +190,6 @@ function start() {
 
         //wElem.append(resultImageWidth.toFixed(1));
         //hElem.append(resultImageHeight.toFixed(1));
-
         wElem.innerHTML = resultImageWidth.toFixed(1);
         hElem.innerHTML = resultImageHeight.toFixed(1);
 
@@ -208,8 +204,8 @@ function start() {
         console.log("Показать информацию");
         //console.log(loadedImg);
 
-        sizeLineMessage.style.display = "none";
-        sizeLine.style.display = "block";
+        document.querySelector(".size-line-message").style.display = "none";
+        document.querySelector(".size-line").style.display = "block";
 
         if (loadedImg.complete) {
             // * вывести размеры загруженного изображения
@@ -575,10 +571,18 @@ function start() {
 
         changeImageBtn.style.display = "none";
 
+        // основные размеры
         document.querySelector(".d-width-size").innerHTML = "";
         document.querySelector(".d-height-size").innerHTML = "";
-        sizeLine.style.display = "none";
-        sizeLineMessage.style.display = "block";
+        document.querySelector(".size-line").style.display = "none";
+        document.querySelector(".size-line-message").style.display = "block";
+
+        // размеры после применения стилей
+        document.querySelector(".st-width-size").innerHTML = "";
+        document.querySelector(".st-height-size").innerHTML = "";
+        document.querySelector(".st-size-line").style.display = "none";
+        document.querySelector(".styles-line-message").style.display = "block";
+        document.querySelector(".computed-styles").innerHTML = ""; 
 
         document.querySelector(".photo img").remove();
         document.querySelector(".submitting-form").style.display = "block";
