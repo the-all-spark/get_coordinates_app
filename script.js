@@ -34,6 +34,20 @@ function start() {
             setTimeout(() => { e.target.select(); }, 1);
         }));
     }
+
+    // Открыть/закрыть блок "Как пользоваться"
+    let howToUseBlockBtn = document.querySelector(".howToUseBlockBtn");
+    let howToUseBlock = document.querySelector(".howToUseBlock");
+
+    howToUseBlockBtn.addEventListener("click", showHideHelpBlock);
+
+    function showHideHelpBlock() {
+        if (howToUseBlock.classList.contains("shownBlock")) {
+            howToUseBlock.classList.remove("shownBlock");
+        } else {
+            howToUseBlock.classList.add("shownBlock");
+        }
+    }
     
     // * Вывод координат при клике на кнопку "Завершить" 
     finishBtn.addEventListener("click", function() { prepareToShowCoords(objCoords) });
