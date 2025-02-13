@@ -88,14 +88,13 @@ input[type="file"] {
     border: 1px solid white;
 }
 
-/* ! размеры svg должны быть под загруженное изображение но не меньше его!! */
 .photo svg {
     display: none;
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 1000px;
-    height: 1000px;
+    /*width: 1000px;
+    height: 1000px;*/
 }
 
 .photo polygon {

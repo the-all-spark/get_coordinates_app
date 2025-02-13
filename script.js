@@ -114,6 +114,7 @@ function start() {
         image.addEventListener("load", function() { 
             applyStylesBtn.removeAttribute("disabled");
             warningMessage.style.display = "none";
+            correctSvgSize(image);
             showInfo(this);
         }); 
     }
@@ -211,6 +212,17 @@ function start() {
         let computedStylesBlock = document.querySelector(".computed-styles");
         computedStylesBlock.innerHTML = `box-sizing: ${image.style.boxSizing}; <br>
         border: ${image.style.border};`
+    }
+
+    // * ---- Корректировка размера холста svg под размер загруженного изображения
+    function correctSvgSize(image) {
+        let imgW = +getSize(getComputedStyle(image).width);
+        let imgH = +getSize(getComputedStyle(image).height);
+
+        let svgElement = document.querySelector(".photo svg");
+
+        svgElement.style.width = imgW + 20 + "px";
+        svgElement.style.height = imgH + 20 + "px";
     }
 
     // * ---- Получение информации
