@@ -1,4 +1,7 @@
 /* -------------------- Общее -------------------- */
+html { 
+    overflow-y: scroll; 
+}
 
 body {
     margin: 0;
@@ -25,10 +28,11 @@ h3 {
 
 .submitting-form {
     width: 40%;
+    height: 190px;
     border: 1px solid rgb(151, 151, 151);
     padding: 40px;
     margin: 0 auto;
-    align-self: center;
+    margin-top: 100px;
 }
 
 .submitting-form p {
@@ -51,6 +55,10 @@ h3 {
 
 .submitting-form button:hover {
     background-color: rgb(209, 250, 233);
+}
+
+input[type="file"] {
+    cursor: pointer;
 }
 
 /* -------------------- Изображение -------------------- */
@@ -169,6 +177,7 @@ h3 {
     grid-template-areas: 
         "box-sizing-block border-block"
         "box-sizing-block apply-btn";
+    margin-bottom: 16px;
 }
 
 .boxSizingBlock {
@@ -224,6 +233,20 @@ h3 {
     /*opacity: 1;*/
     display: block;
 }
+
+/* ----- Блок "Как пользоваться" ---- */
+.howToUseBlock {
+    display: none;
+}
+
+.shownBlock {
+    display: block;
+}
+
+.howToUseBlockBtn:hover {
+    cursor: pointer;
+}
+
 
 /* ----- Вывод координат, кнопки "Завершить", "Обновить", "Загрузить другое изображение" ------- */
 
