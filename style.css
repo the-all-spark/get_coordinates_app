@@ -118,6 +118,7 @@ input[type="file"] {
 .sizeBlock {
     display: grid;
     grid-template-areas: "default-sizes styled-sizes";
+    margin-bottom: 30px;
 }
 
 .default-sizes {
@@ -153,11 +154,21 @@ input[type="file"] {
     color: rgb(151, 151, 151);
 }
 
+.change-width-btn {
+    margin-top: 20px;
+}
+
+.change-width-btn:hover {
+    cursor: pointer;
+}
+
 /* ----- Размеры изображения (после стилизации) ------- */
 
 .st-size-line {
     position: relative;
     display: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .computed-styles {

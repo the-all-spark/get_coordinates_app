@@ -3,9 +3,11 @@ window.addEventListener("load", start);
 function start() {
     window.localStorage.clear(); // очищаем хранилище
 
+    let changeWidthBtn = document.querySelector(".change-width-btn"); // кнопка изменения ширины загруженного изобр-ия
+
     let styleInputsAll = document.querySelectorAll(".styleBlock input"); // все поля формы стилизации
     let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
-    //let appliedMessage = document.querySelector(".submit-btn span"); // сообщение о применении стилей
+    
     let appliedMessage = document.querySelector(".submit-btn .done-message"); // сообщение о применении стилей
     let warningMessage = document.querySelector(".submit-btn .warning-message"); // сообщение-предупреждения
     
@@ -112,7 +114,9 @@ function start() {
         
         // * обработка события после загрузки изображения
         image.addEventListener("load", function() { 
+            changeWidthBtn.removeAttribute("disabled");
             applyStylesBtn.removeAttribute("disabled");
+
             warningMessage.style.display = "none";
             correctSvgSize(image);
             showInfo(this);
@@ -267,12 +271,6 @@ function start() {
         let num = imageSize.slice(0,-2);
         return num;
     }
-
-    // ! Подкорректировать размер svg исходя из размера изображения
-    // let svgBlock = document.querySelector(".photo svg");
-
-
-    
 
     // * функция получения координат: реакция на клик мышки на карте => получение и сохранение координат
     function getCoords(e) {
