@@ -154,12 +154,23 @@ input[type="file"] {
     color: rgb(151, 151, 151);
 }
 
+/* ---- Блок изменения ширины  изображения ---- */
+
 .change-width-btn {
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-bottom: 10px;
 }
 
 .change-width-btn:hover {
     cursor: pointer;
+}
+
+.change-width-block {
+    display: none;
+}
+
+.change-width-block .btn {
+    margin-left: 15px;
 }
 
 /* ----- Размеры изображения (после стилизации) ------- */
@@ -249,14 +260,9 @@ input[type="file"] {
     display: none;
 }
 
-.shownBlock {
-    display: block;
-}
-
 .howToUseBlockBtn:hover {
     cursor: pointer;
 }
-
 
 /* ----- Вывод координат, кнопки "Завершить", "Обновить", "Загрузить другое изображение" ------- */
 
@@ -359,4 +365,10 @@ input[type="file"] {
     bottom: -25px;
     /*right: 30px;
     bottom: 0px;*/
+}
+
+/* --- Прочие --- */
+
+.shownBlock {
+    display: block;
 }
