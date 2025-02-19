@@ -4,6 +4,7 @@ function start() {
     window.localStorage.clear(); // очищаем хранилище
 
     let changeWidthBtn = document.querySelector(".change-width-btn"); // кнопка изменения ширины загруженного изобр-ия
+    let changeWidthBlock = document.querySelector(".change-width-block"); // блок изменения ширины изобр-ия
 
     let styleInputsAll = document.querySelectorAll(".styleBlock input"); // все поля формы стилизации
     let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
@@ -217,6 +218,21 @@ function start() {
         computedStylesBlock.innerHTML = `box-sizing: ${image.style.boxSizing}; <br>
         border: ${image.style.border};`
     }
+
+    // * Отображение блока для изменении ширины загруженного изображения
+    changeWidthBtn.addEventListener("click", function() {
+        if (changeWidthBlock.classList.contains("shownBlock")) {
+            changeWidthBlock.classList.remove("shownBlock");
+        } else {
+            changeWidthBlock.classList.add("shownBlock");
+        }
+    });
+
+    // ! Изменение ширины загруженного изображения
+    /*
+    function changeWidth() {
+        
+    }*/
 
     // * ---- Корректировка размера холста svg под размер загруженного изображения
     function correctSvgSize(image) {
@@ -600,6 +616,7 @@ function start() {
         document.querySelector(".d-height-size").innerHTML = "";
         document.querySelector(".size-line").style.display = "none";
         document.querySelector(".size-line-message").style.display = "block";
+        changeWidthBtn.setAttribute("disabled", "");
 
         // размеры после применения стилей
         document.querySelector(".st-width-size").innerHTML = "";
