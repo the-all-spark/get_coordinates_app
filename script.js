@@ -5,6 +5,7 @@ function start() {
 
     let changeWidthBtn = document.querySelector(".change-width-btn"); // кнопка изменения ширины загруженного изобр-ия
     let changeWidthBlock = document.querySelector(".change-width-block"); // блок изменения ширины изобр-ия
+    let changeWidthOK = document.querySelector(".change-width-block .btn");  // кнопка ОК
 
     let styleInputsAll = document.querySelectorAll(".styleBlock input"); // все поля формы стилизации
     let applyStylesBtn = document.querySelector(".styleBlock input[type='submit']"); // кнопка формы стилизации
@@ -116,6 +117,8 @@ function start() {
         // * обработка события после загрузки изображения
         image.addEventListener("load", function() { 
             changeWidthBtn.removeAttribute("disabled");
+            changeWidthOK.addEventListener("click", changeWidth);
+
             applyStylesBtn.removeAttribute("disabled");
 
             warningMessage.style.display = "none";
@@ -228,11 +231,17 @@ function start() {
         }
     });
 
-    // ! Изменение ширины загруженного изображения
-    /*
+    // * Изменение ширины загруженного изображения
     function changeWidth() {
+        let changeWidthForm = document.querySelector('.change-width-block');
+        let newWidth = changeWidthForm.querySelector('[name="newWidthSize"]').value;
+        let image = document.querySelector('.photo img');
         
-    }*/
+        image.style.width = `${newWidth}px`;
+
+        showImageSizes(image); // отобразить новые размеры
+        correctSvgSize(image); // подкорректировать размер хоста svg
+    }
 
     // * ---- Корректировка размера холста svg под размер загруженного изображения
     function correctSvgSize(image) {
@@ -267,6 +276,11 @@ function start() {
 
     // функция отображения размеров изображения
     function showImageSizes(image) {
+
+        // очищаем, если что-то было введено ранее
+        document.querySelector(".d-width-size").innerHTML = "";
+        document.querySelector(".d-height-size").innerHTML = "";
+
         let wElem = document.querySelector(".d-width-size");
         let hElem = document.querySelector(".d-height-size");
 
@@ -610,6 +624,8 @@ function start() {
         reset(); // сброс данных
 
         changeImageBtn.style.display = "none";
+        changeWidthBlock.classList.remove("shownBlock");
+        document.querySelector("#newWidthSize").value = "";
 
         // основные размеры
         document.querySelector(".d-width-size").innerHTML = "";
