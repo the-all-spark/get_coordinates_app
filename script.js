@@ -239,6 +239,17 @@ function start() {
         
         image.style.width = `${newWidth}px`;
 
+        resetStyleForm(); // обновить форму стилизации
+        warningMessage.style.display = "none";
+        document.querySelector(".submit-btn input").removeAttribute("disabled");
+
+        // обновить блок с новыми размерами
+        resetNewSizesBlock();
+
+        // удалить стили изображения
+        document.querySelector(".photo img").style.boSizing = '';
+        document.querySelector(".photo img").style.border = '';
+
         showImageSizes(image); // отобразить новые размеры
         correctSvgSize(image); // подкорректировать размер хоста svg
     }
@@ -292,8 +303,11 @@ function start() {
         //console.log(`ширина: ${w}`);
         //console.log(`высота: ${h}`);
 
-        wElem.append(w);
-        hElem.append(h);
+        let wResult = Number(w).toFixed(1);
+        let hResult = Number(h).toFixed(1);
+
+        wElem.append(wResult);
+        hElem.append(hResult);
     }
 
     // функция получения числа без px
@@ -635,18 +649,24 @@ function start() {
         changeWidthBtn.setAttribute("disabled", "");
 
         // размеры после применения стилей
-        document.querySelector(".st-width-size").innerHTML = "";
-        document.querySelector(".st-height-size").innerHTML = "";
-        document.querySelector(".st-size-line").style.display = "none";
-        document.querySelector(".styles-line-message").style.display = "block";
-        document.querySelector(".computed-styles").innerHTML = ""; 
-
+        resetNewSizesBlock();
+        
         document.querySelector(".photo img").remove();
         document.querySelector(".submitting-form").style.display = "block";
         document.querySelector("#file").value = '';
 
         resetStyleForm();
     }
+
+    // * функция обновления блока с новыми размерами изображения
+    function resetNewSizesBlock() {
+        document.querySelector(".st-width-size").innerHTML = "";
+        document.querySelector(".st-height-size").innerHTML = "";
+        document.querySelector(".st-size-line").style.display = "none";
+        document.querySelector(".styles-line-message").style.display = "block";
+        document.querySelector(".computed-styles").innerHTML = ""; 
+    }
+
 
     // * функция обновления формы стилизации при смене изображения
     function resetStyleForm() {
